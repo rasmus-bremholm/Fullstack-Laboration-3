@@ -1,5 +1,5 @@
 // Imports
-import express from "express";
+import express, { response } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
@@ -18,6 +18,14 @@ const client = new Client({
 	connectionString: process.env.PGURI,
 });
 client.connect();
+
+// Routes
+
+app.get("/", (req, res) => {
+	res.send({ message: "Hello There", request: req, response: res });
+});
+
+// Setting upserver
 
 app.listen(port, () => {
 	console.log("Server is running on http://localhost:" + port);
