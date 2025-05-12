@@ -21,6 +21,11 @@ const client = new pg_1.Client({
     connectionString: process.env.PGURI,
 });
 client.connect();
+// Routes
+app.get("/", (req, res) => {
+    res.send({ message: "Hello There", request: req, response: res });
+});
+// Setting upserver
 app.listen(port, () => {
     console.log("Server is running on http://localhost:" + port);
 });
