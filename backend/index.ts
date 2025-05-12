@@ -22,7 +22,7 @@ client.connect();
 // Routes
 
 app.get("/", (req, res) => {
-	res.send({ message: "Hello There", request: req, response: res });
+	res.json({ message: "Hello There" });
 });
 
 // Setting upserver

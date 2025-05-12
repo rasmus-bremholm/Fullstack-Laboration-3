@@ -23,7 +23,7 @@ const client = new pg_1.Client({
 client.connect();
 // Routes
 app.get("/", (req, res) => {
-    res.send({ message: "Hello There", request: req, response: res });
+    res.json({ message: "Hello There" });
 });
 // Setting upserver
 app.listen(port, () => {
