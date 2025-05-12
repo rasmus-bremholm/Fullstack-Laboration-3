@@ -10,7 +10,7 @@ const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const pg_1 = require("pg");
 // Global Variables
-const port = 1337;
+const port = process.env.PORT || 1337;
 // Initialisation
 const app = (0, express_1.default)();
 app.use((0, cookie_parser_1.default)());

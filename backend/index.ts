@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 import { Client } from "pg";
 
 // Global Variables
-const port = 1337;
+const port = process.env.PORT || 1337;
 
 // Initialisation
 const app = express();
