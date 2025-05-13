@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 import { Client } from "pg";
 
 // Global Variables
-const port = process.env.PORT || 1337;
+const port = process.env.PORT || 1338;
 
 // Initialisation
 const app = express();
@@ -22,7 +22,14 @@ client.connect();
 // Routes
 
 app.get("/", (req, res) => {
-	res.json({ message: "Hello There" });
+	res.send({ message: "Hello There" });
+});
+
+app.get("/api/users", async (_req, res) => {
+	console.log("hej");
+	const { rows } = await client.query("SELECT * FROM users");
+	console.log(rows);
+	res.status(200).send(rows);
 });
 
 // Setting upserver
