@@ -42,7 +42,11 @@ app.get("/api/students", (_req, res) => __awaiter(void 0, void 0, void 0, functi
     const { rows } = yield client.query("SELECT * FROM students");
     res.status(200).send(rows);
 }));
-app.get("/api/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.get("/api/students/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const studentId = parseInt(req.params.id);
+    if (isNaN(studentId)) {
+        res.status(400).send({ error: "Id needs to be a number" });
+    }
     const { rows } = yield client.query("SELECT * FROM students WHERE id=$1", [req.params.id]);
     if (rows.length > 0) {
         res.status(200).send(rows);
@@ -59,11 +63,28 @@ app.post("/api/students", (req, res) => __awaiter(void 0, void 0, void 0, functi
             req.body.email,
             req.body.password,
         ]);
+        if ((result === null || result === void 0 ? void 0 : result.rowCount) && result.rowCount > 0) {
+            // Sucess
+            res.status(201).send({ message: "Student created" });
+        }
+        else {
+            // Fail
+            res.status(400).send({ error: "Student couldnt be inserted" });
+        }
     }
     catch (error) {
-        res.status(500).send({ error: "Gick inte att inserta studenten i databasen" });
+        res.status(500).send({ error: "Couldnt insert student into database" });
     }
 }));
+app.delete("/api/student/:id", (req, res) => {
+    const studentId = parseInt(req.params.id);
+    if (isNaN(studentId)) {
+        res.status(400).send({ error: "Id needs to be a number" });
+    }
+    try {
+    }
+    catch (error) { }
+});
 // Setting upserver
 app.listen(port, () => {
     console.log("Server is running on http://localhost:" + port);

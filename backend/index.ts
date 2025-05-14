@@ -3,7 +3,7 @@ import express, { response } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
-import { Client } from "pg";
+import { Client, QueryResult } from "pg";
 
 // Global Variables
 const port = process.env.PORT || 1338;
@@ -44,7 +44,11 @@ app.get("/api/students", async (_req, res) => {
 	res.status(200).send(rows);
 });
 
-app.get("/api/:id", async (req, res) => {
+app.get("/api/students/:id", async (req, res) => {
+	const studentId = parseInt(req.params.id);
+	if (isNaN(studentId)) {
+		res.status(400).send({ error: "Id needs to be a number" });
+	}
 	const { rows }: { rows: Student[] } = await client.query("SELECT * FROM students WHERE id=$1", [req.params.id]);
 	if (rows.length > 0) {
 		res.status(200).send(rows);
@@ -55,15 +59,33 @@ app.get("/api/:id", async (req, res) => {
 
 app.post("/api/students", async (req, res) => {
 	try {
-		const result = await client.query("INSERT INTO students (first_name, last_name, email, password) VALUES ($1, $2, $3, $4)", [
+		const result: QueryResult = await client.query("INSERT INTO students (first_name, last_name, email, password) VALUES ($1, $2, $3, $4)", [
 			req.body.first_name,
 			req.body.last_name,
 			req.body.email,
 			req.body.password,
 		]);
+
+		if (result?.rowCount && result.rowCount > 0) {
+			// Sucess
+			res.status(201).send({ message: "Student created" });
+		} else {
+			// Fail
+			res.status(400).send({ error: "Student couldnt be inserted" });
+		}
 	} catch (error) {
-		res.status(500).send({ error: "Gick inte att inserta studenten i databasen" });
+		res.status(500).send({ error: "Couldnt insert student into database" });
 	}
+});
+
+app.delete("/api/student/:id", (req, res) => {
+	const studentId = parseInt(req.params.id);
+	if (isNaN(studentId)) {
+		res.status(400).send({ error: "Id needs to be a number" });
+	}
+
+	try {
+	} catch (error) {}
 });
 
 // Setting upserver
