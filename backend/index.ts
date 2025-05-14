@@ -25,9 +25,9 @@ app.get("/", (req, res) => {
 	res.send({ message: "Hello There" });
 });
 
-app.get("/api/users", async (_req, res) => {
+app.get("/api/students", async (_req, res) => {
 	console.log("hej");
-	const { rows } = await client.query("SELECT * FROM students WHERE id=1");
+	const { rows } = await client.query("SELECT * FROM students");
 	console.log(rows);
 	res.status(200).send(rows);
 });
