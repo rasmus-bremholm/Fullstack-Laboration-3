@@ -27,7 +27,7 @@ app.get("/", (req, res) => {
 
 app.get("/api/users", async (_req, res) => {
 	console.log("hej");
-	const { rows } = await client.query("SELECT * FROM users");
+	const { rows } = await client.query("SELECT * FROM students WHERE id=1");
 	console.log(rows);
 	res.status(200).send(rows);
 });

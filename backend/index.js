@@ -36,7 +36,7 @@ app.get("/", (req, res) => {
 });
 app.get("/api/users", (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("hej");
-    const { rows } = yield client.query("SELECT * FROM users");
+    const { rows } = yield client.query("SELECT * FROM students WHERE id=1");
     console.log(rows);
     res.status(200).send(rows);
 }));
