@@ -32,6 +32,10 @@ interface Student {
 // Routes
 //--------------------------------------------------------------------
 
+app.get("/", (_req, res) => {
+	res.status(200).send({ message: "Hello World" });
+});
+
 // Student Routes
 
 app.get("/api/students", async (_req, res) => {

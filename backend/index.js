@@ -33,6 +33,9 @@ client.connect();
 //--------------------------------------------------------------------
 // Routes
 //--------------------------------------------------------------------
+app.get("/", (_req, res) => {
+    res.status(200).send({ message: "Hello World" });
+});
 // Student Routes
 app.get("/api/students", (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("hej");
