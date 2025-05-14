@@ -51,6 +51,18 @@ interface Student {
 	password: string;
 }
 
+interface Group {
+	id: number;
+	name: string;
+	description: string;
+}
+
+interface Shedule {
+	weekday: string;
+	start_time: string;
+	end_time: string;
+}
+
 //--------------------------------------------------------------------
 // Routes
 //--------------------------------------------------------------------
@@ -74,13 +86,13 @@ app.get("/api/students/:id", async (req, res) => {
 	}
 
 	try {
-		const student = await client.query("SELECT * FROM students WHERE id=$1", [studentId]);
-		const schedule = await client.query("SELECT weekday, start_time, end_time FROM weekly_schedule WHERE student_id=$1", [studentId]);
-		const groups = await client.query(
+		const student = await client.query<Student>("SELECT * FROM students WHERE id=$1", [studentId]);
+		const schedule = await client.query<Shedule>("SELECT weekday, start_time, end_time FROM weekly_schedule WHERE student_id=$1", [studentId]);
+		const groups = await client.query<Group>(
 			"SELECT groups.id, groups.name, groups.description FROM group_members JOIN groups ON groups.id = group_members.group_id WHERE group_members.student_id=$1",
 			[studentId]
 		);
-		const events = await client.query(
+		const events = await client.query<Event>(
 			"SELECT events.* FROM events JOIN group_members ON events.group_id = group_members.group_id WHERE group_members.student_id=$1",
 			[studentId]
 		);
