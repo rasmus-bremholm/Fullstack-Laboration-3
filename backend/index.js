@@ -18,6 +18,21 @@ const cors_1 = __importDefault(require("cors"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const pg_1 = require("pg");
+/*
+    Frågor till Vanja/Jon handledning.
+
+    Nu har jag fixat min databas som jag tror ska fungera.
+    Nu hamnar jag i en situation där på min profilsida till exempel behöver ha tillgång till många bord.
+    Istället för att skapa flera routes, hur ska jag kombinera flera queries och baka ihop det till ett resultat.
+
+    Exempel 1 )
+    Vi behöver på profilsidan åtkomst till all information om eleven, samt info om schema och grupper.
+    Men jag skulle väl egentligen göra 1 fetch med mycket data snarare än 4 fetchar som i mitt förra
+
+    Jag försökte att skapa en till const { rows } = await client, men det löser sig inte med typen. Är nog inte helt införstådd över hur
+    rows används.
+
+*/
 // Global Variables
 const port = process.env.PORT || 1338;
 // Initialisation
@@ -76,15 +91,21 @@ app.post("/api/students", (req, res) => __awaiter(void 0, void 0, void 0, functi
         res.status(500).send({ error: "Couldnt insert student into database" });
     }
 }));
-app.delete("/api/student/:id", (req, res) => {
+app.delete("/api/students/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const studentId = parseInt(req.params.id);
     if (isNaN(studentId)) {
         res.status(400).send({ error: "Id needs to be a number" });
     }
     try {
+        const result = yield client.query("DELETE FROM students WHERE id=$1", [studentId]);
+        if (result.rowCount && result.rowCount > 0) {
+            res.status(204).send({ message: "Student Deleted" });
+        }
     }
-    catch (error) { }
-});
+    catch (error) {
+        res.status(500).send({ error: "Couldnt delete student" });
+    }
+}));
 // Setting upserver
 app.listen(port, () => {
     console.log("Server is running on http://localhost:" + port);
