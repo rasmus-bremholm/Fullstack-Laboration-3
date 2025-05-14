@@ -4,8 +4,12 @@ import { useState, useEffect } from "react";
 
 const url = "https://fullstack-laboration-3.onrender.com";
 
+interface messageResponse {
+	message: string;
+}
+
 export default function Test() {
-	const [data, setData] = useState({});
+	const [data, setData] = useState<messageResponse | null>(null);
 
 	useEffect(() => {
 		async function fetchData() {

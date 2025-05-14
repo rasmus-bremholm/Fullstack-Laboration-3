@@ -19,17 +19,47 @@ const client = new Client({
 });
 client.connect();
 
-// Routes
+// Interfaces
+interface Student {
+	id: number;
+	first_name: string;
+	last_name: string;
+	email: string;
+	password: string;
+}
 
-app.get("/", (req, res) => {
-	res.send({ message: "Hello There" });
-});
+//--------------------------------------------------------------------
+// Routes
+//--------------------------------------------------------------------
+
+// Student Routes
 
 app.get("/api/students", async (_req, res) => {
 	console.log("hej");
-	const { rows } = await client.query("SELECT * FROM students");
-	console.log(rows);
+	const { rows }: { rows: Student[] } = await client.query("SELECT * FROM students");
 	res.status(200).send(rows);
+});
+
+app.get("/api/:id", async (req, res) => {
+	const { rows }: { rows: Student[] } = await client.query("SELECT * FROM students WHERE id=$1", [req.params.id]);
+	if (rows.length > 0) {
+		res.status(200).send(rows);
+	} else {
+		res.status(404).send({ message: "Student not found" });
+	}
+});
+
+app.post("/api/students", async (req, res) => {
+	try {
+		const result = await client.query("INSERT INTO students (first_name, last_name, email, password) VALUES ($1, $2, $3, $4)", [
+			req.body.first_name,
+			req.body.last_name,
+			req.body.email,
+			req.body.password,
+		]);
+	} catch (error) {
+		res.status(500).send({ error: "Gick inte att inserta studenten i databasen" });
+	}
 });
 
 // Setting upserver

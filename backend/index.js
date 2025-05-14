@@ -30,15 +30,36 @@ const client = new pg_1.Client({
     connectionString: process.env.PGURI,
 });
 client.connect();
+//--------------------------------------------------------------------
 // Routes
-app.get("/", (req, res) => {
-    res.send({ message: "Hello There" });
-});
+//--------------------------------------------------------------------
+// Student Routes
 app.get("/api/students", (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("hej");
     const { rows } = yield client.query("SELECT * FROM students");
-    console.log(rows);
     res.status(200).send(rows);
+}));
+app.get("/api/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { rows } = yield client.query("SELECT * FROM students WHERE id=$1", [req.params.id]);
+    if (rows.length > 0) {
+        res.status(200).send(rows);
+    }
+    else {
+        res.status(404).send({ message: "Student not found" });
+    }
+}));
+app.post("/api/students", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield client.query("INSERT INTO students (first_name, last_name, email, password) VALUES ($1, $2, $3, $4)", [
+            req.body.first_name,
+            req.body.last_name,
+            req.body.email,
+            req.body.password,
+        ]);
+    }
+    catch (error) {
+        res.status(500).send({ error: "Gick inte att inserta studenten i databasen" });
+    }
 }));
 // Setting upserver
 app.listen(port, () => {
