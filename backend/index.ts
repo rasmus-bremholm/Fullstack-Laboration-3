@@ -72,11 +72,22 @@ app.get("/api/students/:id", async (req, res) => {
 	if (isNaN(studentId)) {
 		res.status(400).send({ error: "Id needs to be a number" });
 	}
-	const { rows }: { rows: Student[] } = await client.query("SELECT * FROM students WHERE id=$1", [req.params.id]);
-	if (rows.length > 0) {
-		res.status(200).send(rows);
-	} else {
-		res.status(404).send({ message: "Student not found" });
+
+	try {
+		const student = await client.query("SELECT * FROM students WHERE id=$1", [studentId]);
+		const schedule = await client.query("SELECT weekday, start_time, end_time FROM weekly_schedule WHERE student_id=$1", [studentId]);
+		const groups = await client.query(
+			"SELECT groups.id, groups.name, groups.description FROM group_members JOIN groups ON groups.id = group_members.group_id WHERE group_members.student_id=$1",
+			[studentId]
+		);
+		const events = await client.query(
+			"SELECT events.* FROM events JOIN group_members ON events.group_id = group_members.group_id WHERE group_members.student_id=$1",
+			[studentId]
+		);
+		res.status(200).send({ student: student.rows[0], schedule: schedule.rows, groups: groups.rows, events: events.rows });
+		console.log(student, schedule, groups, events);
+	} catch (error) {
+		res.status(500).json({ error: "Something went wrong, stupid" });
 	}
 });
 
