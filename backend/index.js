@@ -27,10 +27,16 @@ const pg_1 = require("pg");
 
     Exempel 1 )
     Vi behöver på profilsidan åtkomst till all information om eleven, samt info om schema och grupper.
-    Men jag skulle väl egentligen göra 1 fetch med mycket data snarare än 4 fetchar som i mitt förra
+    Men jag skulle väl egentligen göra 1 fetch med mycket data snarare än 4 fetchar som i mitt förra.
+    Samma problem ifall jag vill uppdatera gruppen på en user, en ny fetch till en ny route eller?
 
     Jag försökte att skapa en till const { rows } = await client, men det löser sig inte med typen. Är nog inte helt införstådd över hur
     rows används.
+*/
+/*
+    TODO:
+    - Fixa datan som returneras. (schema, user, groups)
+    - Fixa "avatar" bilden i databasen.
 
 */
 // Global Variables
@@ -90,6 +96,25 @@ app.post("/api/students", (req, res) => __awaiter(void 0, void 0, void 0, functi
     catch (error) {
         res.status(500).send({ error: "Couldnt insert student into database" });
     }
+}));
+app.put("/api/students/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const studentId = parseInt(req.params.id);
+    if (isNaN(studentId)) {
+        res.status(400).send({ error: "Id needs to be a number" });
+    }
+    try {
+        const result = yield client.query("UPDATE students SET first_name=$2, last_name=$3, email=$4, password=$5 WHERE id=$1", [
+            studentId,
+            req.body.first_name,
+            req.body.last_name,
+            req.body.email,
+            req.body.password,
+        ]);
+        if (result.rowCount && result.rowCount > 0) {
+            res.status(200).send({ message: "Updated student information" });
+        }
+    }
+    catch (error) { }
 }));
 app.delete("/api/students/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const studentId = parseInt(req.params.id);
