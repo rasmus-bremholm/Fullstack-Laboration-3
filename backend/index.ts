@@ -117,7 +117,9 @@ app.put("/api/students/:id", async (req, res) => {
 		if (result.rowCount && result.rowCount > 0) {
 			res.status(200).send({ message: "Updated student information" });
 		}
-	} catch (error) {}
+	} catch (error) {
+		res.status(500).send({ error: "Couldnt update student" });
+	}
 });
 
 app.delete("/api/students/:id", async (req, res) => {

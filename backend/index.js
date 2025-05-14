@@ -114,7 +114,9 @@ app.put("/api/students/:id", (req, res) => __awaiter(void 0, void 0, void 0, fun
             res.status(200).send({ message: "Updated student information" });
         }
     }
-    catch (error) { }
+    catch (error) {
+        res.status(500).send({ error: "Couldnt update student" });
+    }
 }));
 app.delete("/api/students/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const studentId = parseInt(req.params.id);
