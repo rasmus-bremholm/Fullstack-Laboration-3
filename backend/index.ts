@@ -209,24 +209,31 @@ app.delete("/api/students/:id", async (req, res) => {
 // Login
 
 app.post("/api/login", async (req, res) => {
-	const { email, password }: LoginFormData = req.body;
-	const result = await client.query("SELECT * FROM students WHERE email=$1", [email]);
-	const user: Student = result.rows[0];
+	console.log("Login info sent to server: ", req.body);
 
-	// Validerar alla uppgifter
-	if (!user || user.password !== password) {
-		res.status(401).send({ error: "Invalid Email or Password" });
+	try {
+		const { email, password }: LoginFormData = req.body;
+		const result = await client.query("SELECT * FROM students WHERE email=$1", [email]);
+		const user: Student = result.rows[0];
+
+		// Validerar alla uppgifter
+		if (!user || user.password !== password) {
+			res.status(401).send({ error: "Invalid Email or Password" });
+		}
+
+		res.cookie("token", user.id, {
+			httpOnly: true,
+			secure: true,
+			sameSite: "lax",
+			path: "/",
+			maxAge: 60 * 60 * 24, // Detta borde vara en dag ifall jag räknat rätt.
+		});
+
+		res.status(200).send({ sucess: true, id: user.id });
+	} catch (error: unknown) {
+		console.log("Login Error", error);
+		res.status(500).send({ error: "Something went wrong" });
 	}
-
-	res.cookie("token", user.id, {
-		httpOnly: true,
-		secure: true,
-		sameSite: "lax",
-		path: "/",
-		maxAge: 60 * 60 * 24, // Detta borde vara en dag ifall jag räknat rätt.
-	});
-
-	res.status(200).send({ sucess: true, id: user.id });
 });
 
 app.post("/api/logout", async (req, res) => {

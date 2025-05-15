@@ -170,21 +170,28 @@ app.delete("/api/students/:id", (req, res) => __awaiter(void 0, void 0, void 0, 
 }));
 // Login
 app.post("/api/login", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { email, password } = req.body;
-    const result = yield client.query("SELECT * FROM students WHERE email=$1", [email]);
-    const user = result.rows[0];
-    // Validerar alla uppgifter
-    if (!user || user.password !== password) {
-        res.status(401).send({ error: "Invalid Email or Password" });
+    console.log("Login info sent to server: ", req.body);
+    try {
+        const { email, password } = req.body;
+        const result = yield client.query("SELECT * FROM students WHERE email=$1", [email]);
+        const user = result.rows[0];
+        // Validerar alla uppgifter
+        if (!user || user.password !== password) {
+            res.status(401).send({ error: "Invalid Email or Password" });
+        }
+        res.cookie("token", user.id, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "lax",
+            path: "/",
+            maxAge: 60 * 60 * 24, // Detta borde vara en dag ifall jag räknat rätt.
+        });
+        res.status(200).send({ sucess: true, id: user.id });
     }
-    res.cookie("token", user.id, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "lax",
-        path: "/",
-        maxAge: 60 * 60 * 24, // Detta borde vara en dag ifall jag räknat rätt.
-    });
-    res.status(200).send({ sucess: true, id: user.id });
+    catch (error) {
+        console.log("Login Error", error);
+        res.status(500).send({ error: "Something went wrong" });
+    }
 }));
 app.post("/api/logout", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // Logout

@@ -29,7 +29,6 @@ export default function Login() {
 			<div>
 				<form
 					action={async (formData) => {
-						"use server";
 						await login(formData);
 						redirect("/");
 					}}>
@@ -57,7 +56,6 @@ export default function Login() {
 			<div>
 				<form
 					action={async (formData) => {
-						"use server";
 						await login(formData);
 						redirect("/");
 					}}>

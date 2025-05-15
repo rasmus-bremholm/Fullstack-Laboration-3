@@ -1,3 +1,5 @@
+"use server";
+
 // Intressant som fan https://nextjs.org/docs/app/getting-started/updating-data
 // https://developer.mozilla.org/en-US/docs/Web/API/FormData/FormData
 // https://www.youtube.com/watch?v=DJvM2lSPn6w
@@ -24,6 +26,9 @@ export async function login(formData: FormData) {
 			const response = await fetch(baseurl + "/api/login", {
 				method: "POST",
 				body: JSON.stringify(user),
+				headers: {
+					"Content-Type": "application/json",
+				},
 			});
 			if (!response.ok) {
 				console.error("Login Failed");
