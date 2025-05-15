@@ -10,6 +10,7 @@
 	--accent: #0766ff;
 	--accent-background: #ebf5ff;
 	--foreground: #171717;
+	--shadow: rgba(0, 0, 0, 0.1) 2px 1.95px 5px;
 }
 
 html,

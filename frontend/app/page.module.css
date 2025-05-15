@@ -2,7 +2,9 @@
 	display: grid;
 	grid-template-columns: subgrid;
 	grid-column: 1/-1;
-	padding: 2rem;
+	padding: 1rem;
+	background-color: var(--panel-color);
+	box-shadow: var(--shadow);
 }
 
 .gridcontent {
