@@ -103,7 +103,7 @@ app.get("/api/user", async (req, res) => {
 	const token: string = req.cookies.token;
 	const studentId = parseInt(token);
 	if (isNaN(studentId)) {
-		res.status(400).send({ error: "Id needs to be a number" });
+		res.status(400).send({ error: "Ingen giltig token" });
 	}
 
 	try {
@@ -118,7 +118,7 @@ app.get("/api/user", async (req, res) => {
 			[studentId]
 		);
 		res.status(200).send({ student: student.rows[0], schedule: schedule.rows, groups: groups.rows, events: events.rows });
-		console.log(student, schedule, groups, events);
+		//console.log(student, schedule, groups, events);
 	} catch (error) {
 		res.status(500).json({ error: "Something went wrong, stupid" });
 	}

@@ -32,3 +32,8 @@ export interface comment {
 	text: string;
 	sender: number;
 }
+
+export interface login_form_fields {
+	email: string;
+	password: string;
+}
