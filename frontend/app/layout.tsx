@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
+import Navbar from "./components/Navbar";
+
 // Inter funkar bra här.
 const inter = Inter({
 	variable: "--font-geist-sans",
@@ -20,7 +22,12 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang='en'>
-			<body className={`${inter.variable}`}>{children}</body>
+			<body className={`${inter.variable}`}>
+				<div className='grid-container'>
+					<Navbar />
+					<main>{children}</main>
+				</div>
+			</body>
 		</html>
 	);
 }

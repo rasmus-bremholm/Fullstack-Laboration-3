@@ -1,0 +1,13 @@
+.navbar {
+	display: grid;
+	grid-template-columns: subgrid;
+	grid-column: 1/-1;
+	padding: 2rem;
+}
+
+.gridcontent {
+	grid-column: 2;
+	display: flex;
+	justify-content: center;
+	gap: 2rem;
+}
