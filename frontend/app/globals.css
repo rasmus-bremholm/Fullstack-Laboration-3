@@ -9,7 +9,7 @@
 	--alert: #e51b3c;
 	--accent: #0766ff;
 	--accent-background: #ebf5ff;
-	--foreground: #171717;
+	--icons: #58595b;
 	--shadow: rgba(0, 0, 0, 0.1) 2px 1.95px 5px;
 }
 
@@ -53,6 +53,7 @@ main {
 }
 
 .material-symbols-outlined {
-	font-variation-settings: "FILL" 0, "wght" 200, "GRAD" 200, "opsz" 24;
+	font-variation-settings: "FILL" 0, "wght" 150, "GRAD" 200, "opsz" 24;
 	font-size: 36px;
+	color: var(--icons);
 }
