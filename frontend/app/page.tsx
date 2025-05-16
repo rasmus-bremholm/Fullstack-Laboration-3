@@ -22,7 +22,7 @@ export default function Home() {
 	const handleSubmit = () => {
 		// Hello
 		event?.preventDefault();
-		console.log("Heil Josef");
+		setPostText("");
 	};
 
 	return (

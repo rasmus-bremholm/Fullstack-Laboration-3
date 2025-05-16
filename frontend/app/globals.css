@@ -65,6 +65,7 @@ button {
 	border-radius: 25px;
 	background-color: var(--accent);
 	color: var(--background);
+	font-weight: 600;
 
 	.material-symbols-outlined {
 		color: var(--background);
