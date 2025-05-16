@@ -1,0 +1,46 @@
+.feed {
+	display: grid;
+	grid-template-columns: auto;
+}
+
+.createpost {
+	margin-top: 1rem;
+	padding: 1rem;
+	background-color: var(--panel-color);
+	box-shadow: var(--shadow);
+	border-radius: var(--border-radius);
+}
+
+.textarea {
+	padding: 1rem;
+	outline: none;
+	border: none;
+	background-color: var(--input-background);
+	border-radius: 25px;
+	resize: none;
+	height: 2.5rem;
+	transition: height 0.2s ease-in-out;
+}
+
+.textarea:focus {
+	outline: 1px solid var(--text-color-inactive);
+	height: 5rem;
+}
+
+.inputcontainer {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	gap: 1rem;
+	padding-bottom: 0.5rem;
+}
+
+.submitcontainer {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 1rem;
+	padding-top: 0.5rem;
+
+	input {
+		width: 10%;
+	}
+}

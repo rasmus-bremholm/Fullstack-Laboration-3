@@ -33,4 +33,9 @@
 	height: 2.5rem;
 	border-radius: 50%;
 	background-color: var(--background);
+
+	&:hover {
+		background-color: var(--accent);
+		color: var(--panel-color);
+	}
 }
