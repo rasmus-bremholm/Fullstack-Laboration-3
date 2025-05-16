@@ -2,10 +2,9 @@ export interface user {
 	id: number;
 	first_name: string;
 	last_name: string;
-	is_admin: boolean;
 	email: string;
 	password: string;
-	avatar: string;
+	profile_picture: string;
 }
 
 export interface shedule_event {

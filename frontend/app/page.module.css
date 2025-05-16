@@ -11,5 +11,26 @@
 	grid-column: 2;
 	display: flex;
 	justify-content: center;
+	align-items: center;
 	gap: 2rem;
+}
+
+.usercontent {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	gap: 2rem;
+}
+
+.icons {
+	cursor: pointer;
+	font-variation-settings: "FILL" 0, "wght" 200, "GRAD" 200, "opsz" 24;
+	font-size: 20px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.5rem;
+	height: 2.5rem;
+	border-radius: 50%;
+	background-color: var(--background);
 }

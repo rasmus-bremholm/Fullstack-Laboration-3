@@ -9,23 +9,11 @@ import { Client, QueryResult } from "pg";
 /*
 	Frågor till Vanja/Jon handledning.
 
-	Nu har jag fixat min databas som jag tror ska fungera.
-	Nu hamnar jag i en situation där på min profilsida till exempel behöver ha tillgång till många bord.
-	Istället för att skapa flera routes, hur ska jag kombinera flera queries och baka ihop det till ett resultat.
-
-	Exempel 1 )
-	Vi behöver på profilsidan åtkomst till all information om eleven, samt info om schema och grupper.
-	Men jag skulle väl egentligen göra 1 fetch med mycket data snarare än 4 fetchar som i mitt förra.
-	Samma problem ifall jag vill uppdatera gruppen på en user, en ny fetch till en ny route eller?
-
-	Jag försökte att skapa en till const { rows } = await client, men det löser sig inte med typen. Är nog inte helt införstådd över hur
-	rows används.
 */
 
 /*
 	TODO:
-	- Fixa datan som returneras. (schema, user, groups)
-	- Fixa "avatar" bilden i databasen.
+	- Fixa "avatar" bilden i databasen. Måste bara lägga till typen här så den kommer med.
 
 */
 
@@ -51,6 +39,7 @@ interface Student {
 	last_name: string;
 	email: string;
 	password: string;
+	profile_picture: string;
 }
 
 interface Group {
@@ -150,12 +139,10 @@ app.get("/api/students/:id", async (req, res) => {
 
 app.post("/api/students", async (req, res) => {
 	try {
-		const result: QueryResult = await client.query("INSERT INTO students (first_name, last_name, email, password) VALUES ($1, $2, $3, $4)", [
-			req.body.first_name,
-			req.body.last_name,
-			req.body.email,
-			req.body.password,
-		]);
+		const result: QueryResult = await client.query(
+			"INSERT INTO students (first_name, last_name, email, password, profile_picture) VALUES ($1, $2, $3, $4, $5)",
+			[req.body.first_name, req.body.last_name, req.body.email, req.body.password, req.body.profile_picture]
+		);
 
 		if (result?.rowCount && result.rowCount > 0) {
 			// Sucess
@@ -175,13 +162,10 @@ app.put("/api/students/:id", async (req, res) => {
 		res.status(400).send({ error: "Id needs to be a number" });
 	}
 	try {
-		const result: QueryResult = await client.query("UPDATE students SET first_name=$2, last_name=$3, email=$4, password=$5 WHERE id=$1", [
-			studentId,
-			req.body.first_name,
-			req.body.last_name,
-			req.body.email,
-			req.body.password,
-		]);
+		const result: QueryResult = await client.query(
+			"UPDATE students SET first_name=$2, last_name=$3, email=$4, password=$5, profile_picture=$6 WHERE id=$1",
+			[studentId, req.body.first_name, req.body.last_name, req.body.email, req.body.password, req.body.profile_picture]
+		);
 		if (result.rowCount && result.rowCount > 0) {
 			res.status(200).send({ message: "Updated student information" });
 		}

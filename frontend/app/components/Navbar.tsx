@@ -12,6 +12,9 @@ export default function Navbar() {
 					<span className='material-symbols-outlined'>calendar_month</span>
 				</Link>
 			</div>
+			<div className={styles.usercontent}>
+				<span className={`material-symbols-outlined ${styles.icons}`}>notifications</span>
+			</div>
 		</nav>
 	);
 }
