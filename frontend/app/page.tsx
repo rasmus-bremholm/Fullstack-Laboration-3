@@ -3,15 +3,26 @@ import styles from "./styles/feed.module.css";
 import extrastyles from "./page.module.css";
 import Image from "next/image";
 import { Divider } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Home() {
 	const [postText, setPostText] = useState("");
 	const [isFocused, setIsFocused] = useState(false);
 	const [disabeledSubmit, setDisabledSubmit] = useState(true);
 
+	useEffect(() => {
+		// Validera input
+		if (postText.length > 0) {
+			setDisabledSubmit(false);
+		} else {
+			setDisabledSubmit(true);
+		}
+	}, [postText]);
+
 	const handleSubmit = () => {
 		// Hello
+		event?.preventDefault();
+		console.log("Heil Josef");
 	};
 
 	return (
