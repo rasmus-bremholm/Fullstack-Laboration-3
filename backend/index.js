@@ -29,12 +29,14 @@ const pg_1 = require("pg");
 */
 // Global Variables
 const port = process.env.PORT || 1338;
+// Fy fan för cors. Nära att faila hela labben här och bara gråta.
+const allowedOrigins = ["http://localhost:3000", "http://localhost:1338", "https://fullstack-laboration-3.vercel.app"];
 // Initialisation
 const app = (0, express_1.default)();
 app.use((0, cookie_parser_1.default)());
 app.use(express_1.default.json());
 app.use((0, cors_1.default)({
-    origin: "https://fullstack-laboration-3.vercel.app/",
+    origin: allowedOrigins,
     credentials: true,
 }));
 dotenv_1.default.config();
