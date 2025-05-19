@@ -28,7 +28,13 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(
 	cors({
-		origin: allowedOrigins,
+		origin: (origin, callback) => {
+			if (!origin || allowedOrigins.includes(origin)) {
+				callback(null, true);
+			} else {
+				callback(new Error("Cors funkade inte"));
+			}
+		},
 		credentials: true,
 	})
 );

@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { login_form_fields } from "../types/types";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
 	const [signup, setSignUp] = useState(false);
@@ -12,7 +12,7 @@ export default function Login() {
 		password: "",
 	});
 
-	const handleSignUpSubmit = async (event: React.FocusEvent) => {
+	const handleSignUpSubmit = async (event: React.FormEvent) => {
 		event.preventDefault();
 
 		// rest of signup fetch
