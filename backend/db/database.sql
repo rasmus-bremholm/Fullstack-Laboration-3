@@ -5,7 +5,8 @@ DROP TABLE IF EXISTS group_members;
 DROP TABLE IF EXISTS groups;
 DROP TABLE IF EXISTS events;
 
-CREATE TABLE students (id SERIAL PRIMARY KEY, first_name TEXT NOT NULL, last_name TEXT NOT NULL, email TEXT UNIQUE NOT NULL, password TEXT NOT NULL);
+
+CREATE TABLE students (id SERIAL PRIMARY KEY, first_name TEXT NOT NULL, last_name TEXT NOT NULL, email TEXT UNIQUE NOT NULL, password TEXT NOT NULL, profile_picture TEXT DEFAULT '/images/default_avatar.png');
 
 CREATE TABLE weekly_schedule (id SERIAL PRIMARY KEY, student_id INTEGER REFERENCES students(id) ON DELETE CASCADE, weekday TEXT CHECK (weekday IN ('Monday', 'Tuesday','Wednesday', 'Thursday', 'Friday')), start_time TIME NOT NULL, end_time TIME NOT NULL);
 

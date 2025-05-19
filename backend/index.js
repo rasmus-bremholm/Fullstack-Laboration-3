@@ -175,6 +175,22 @@ app.post("/api/logout", (req, res) => __awaiter(void 0, void 0, void 0, function
     res.clearCookie("token");
     res.status(204).send({ message: "Logged out" });
 }));
+// Posts
+app.get("/api/posts", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const token = req.cookies.token;
+        const studentId = parseInt(token);
+        if (isNaN(studentId)) {
+            res.status(401).send({ error: "Ingen/ogiltilg token" });
+        }
+        const result = yield client.query("SELECT posts.id, posts.text, posts.group_id, students.first_name, students.last_name FROM posts JOIN students ON posts.sender_id = students.id JOIN group_members ON posts.group_id = group_members.group_id WHERE group_members.student_id=$1", [studentId]);
+        res.status(200).send({ posts: result.rows });
+    }
+    catch (error) {
+        console.log("Couldnt get posts");
+        res.status(500).send({ error: "Vi kunde inte fetcha posterna." });
+    }
+}));
 // Settingup server
 app.listen(port, () => {
     console.log("Server is running on http://localhost:" + port);

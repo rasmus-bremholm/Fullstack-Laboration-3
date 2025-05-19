@@ -4,6 +4,7 @@ import extrastyles from "./page.module.css";
 import Image from "next/image";
 import { Divider } from "@mui/material";
 import { useEffect, useState } from "react";
+import Posts from "./components/Posts";
 
 export default function Home() {
 	const [postText, setPostText] = useState("");
@@ -51,6 +52,7 @@ export default function Home() {
 					</div>
 				</form>
 			</div>
+			<Posts />
 		</div>
 	);
 }

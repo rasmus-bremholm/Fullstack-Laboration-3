@@ -226,6 +226,26 @@ app.post("/api/logout", async (req, res) => {
 	res.status(204).send({ message: "Logged out" });
 });
 
+// Posts
+
+app.get("/api/posts", async (req, res) => {
+	try {
+		const token: string = req.cookies.token;
+		const studentId = parseInt(token);
+		if (isNaN(studentId)) {
+			res.status(401).send({ error: "Ingen/ogiltilg token" });
+		}
+		const result = await client.query(
+			"SELECT posts.id, posts.text, posts.group_id, students.first_name, students.last_name FROM posts JOIN students ON posts.sender_id = students.id JOIN group_members ON posts.group_id = group_members.group_id WHERE group_members.student_id=$1",
+			[studentId]
+		);
+		res.status(200).send({ posts: result.rows });
+	} catch (error: unknown) {
+		console.log("Couldnt get posts");
+		res.status(500).send({ error: "Vi kunde inte fetcha posterna." });
+	}
+});
+
 // Settingup server
 
 app.listen(port, () => {
