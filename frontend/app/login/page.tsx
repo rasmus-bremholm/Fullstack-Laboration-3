@@ -1,16 +1,40 @@
 "use client";
 import { useEffect, useState } from "react";
-import { redirect } from "next/navigation";
-import { login } from "../actions/form";
 import { login_form_fields } from "../types/types";
+import { useRouter } from "next/router";
 
 export default function Login() {
 	const [signup, setSignUp] = useState(false);
+	const router = useRouter();
 	const [submitDisabeled, setSubmitDisabled] = useState(true);
 	const [userLoginDetails, setUserLoginDetails] = useState<login_form_fields>({
 		email: "",
 		password: "",
 	});
+
+	const handleSignUpSubmit = async (event: React.FocusEvent) => {
+		event.preventDefault();
+
+		// rest of signup fetch
+	};
+
+	const handleLoginSubmit = async (event: React.FormEvent) => {
+		event.preventDefault();
+
+		const response = await fetch("https://fullstack-laboration-3.onrender.com/api/login", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ email: userLoginDetails.email, password: userLoginDetails.password }),
+			credentials: "include",
+		});
+
+		if (response.ok) {
+			console.log("Vi loggade in");
+			router.push("/");
+		} else {
+			console.log("Login failade");
+		}
+	};
 
 	function swapSignInSignUp() {
 		setSignUp(!signup);
@@ -27,11 +51,7 @@ export default function Login() {
 	if (!signup) {
 		return (
 			<div>
-				<form
-					action={async (formData) => {
-						await login(formData);
-						redirect("/");
-					}}>
+				<form onSubmit={handleLoginSubmit}>
 					<input
 						type='email'
 						name='email'
@@ -54,11 +74,7 @@ export default function Login() {
 	} else {
 		return (
 			<div>
-				<form
-					action={async (formData) => {
-						await login(formData);
-						redirect("/");
-					}}>
+				<form onSubmit={handleSignUpSubmit}>
 					<input
 						type='email'
 						name='email'
