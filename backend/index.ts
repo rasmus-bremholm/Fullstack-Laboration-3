@@ -221,7 +221,8 @@ app.post("/api/login", async (req, res) => {
 		res.cookie("token", user.id, {
 			httpOnly: true,
 			secure: true,
-			sameSite: "lax",
+			// Denna jäveln!!!!
+			sameSite: "none",
 			path: "/",
 			maxAge: 60 * 60 * 24, // Detta borde vara en dag ifall jag räknat rätt.
 		});
