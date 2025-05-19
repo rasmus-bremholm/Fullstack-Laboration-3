@@ -8,7 +8,7 @@ const url = "https://fullstack-laboration-3.onrender.com";
 // https://fullstack-laboration-3.onrender.com
 
 export default function Posts() {
-	const [posts, setPosts] = useState([]);
+	const [posts, setPosts] = useState<post[]>([]);
 
 	useEffect(() => {
 		async function fetchPosts() {

@@ -24,7 +24,12 @@ const port = process.env.PORT || 1338;
 const app = express();
 app.use(cookieParser());
 app.use(express.json());
-app.use(cors());
+app.use(
+	cors({
+		origin: "https://fullstack-laboration-3.vercel.app/",
+		credentials: true,
+	})
+);
 dotenv.config();
 const client = new Client({
 	connectionString: process.env.PGURI,
