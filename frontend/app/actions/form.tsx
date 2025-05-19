@@ -17,13 +17,16 @@ interface LoginResponse {
 
 const baseurl = process.env.BACKEND_URL;
 
+// https://fullstack-laboration-3.onrender.com/api/login
+// baseurl + "/api/login"
+
 export async function login(formData: FormData) {
 	"use server";
 	const user = { email: formData.get("email"), password: formData.get("password") };
 	// Do a fetch against database to check credentials, if user.email and user.password matches. Set the cookies.
 	if (baseurl) {
 		try {
-			const response = await fetch(baseurl + "/api/login", {
+			const response = await fetch("https://fullstack-laboration-3.onrender.com/api/login", {
 				method: "POST",
 				body: JSON.stringify(user),
 				headers: {

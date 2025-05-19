@@ -168,6 +168,7 @@ app.post("/api/login", (req, res) => __awaiter(void 0, void 0, void 0, function*
             path: "/",
             maxAge: 60 * 60 * 24, // Detta borde vara en dag ifall jag räknat rätt.
         });
+        console.log("Setting cookie for user: ", user.id);
         res.status(200).send({ sucess: true, id: user.id });
     }
     catch (error) {
