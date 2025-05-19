@@ -14,9 +14,10 @@ export default function Posts() {
 		async function fetchPosts() {
 			const response = await fetch(`${url}/api/posts`, {
 				method: "GET",
+				credentials: "include",
 			});
 			const posts = await response.json();
-			setPosts(posts);
+			setPosts(posts.posts);
 		}
 		fetchPosts();
 	}, []);

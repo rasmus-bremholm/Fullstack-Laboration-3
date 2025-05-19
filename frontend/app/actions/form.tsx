@@ -29,6 +29,8 @@ export async function login(formData: FormData) {
 				headers: {
 					"Content-Type": "application/json",
 				},
+				// Superviktig line!!! Sabbade hela loginet
+				credentials: "include",
 			});
 			if (!response.ok) {
 				console.error("Login Failed");
