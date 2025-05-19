@@ -1,0 +1,25 @@
+.post {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	grid-template-rows: auto 1fr;
+	padding: 1rem;
+	margin-top: 1rem;
+	background-color: var(--panel-color);
+	border-radius: var(--border-radius);
+	box-shadow: var(--shadow);
+}
+
+.postheader {
+	grid-column: span 2;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	text-transform: capitalize;
+	font-weight: 700;
+	padding-bottom: 0.5rem;
+}
+
+.icon {
+	font-size: 20px;
+	cursor: pointer;
+}

@@ -21,8 +21,9 @@ export interface group {
 export interface post {
 	id: number;
 	text: string;
-	sender: number;
-	group: group;
+	first_name: string;
+	last_name: string;
+	group_id: number;
 	comments: comment;
 }
 

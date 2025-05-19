@@ -7,6 +7,10 @@ import { useEffect, useState } from "react";
 const url = "https://fullstack-laboration-3.onrender.com";
 // https://fullstack-laboration-3.onrender.com
 
+interface postsResponse {
+	posts: post[];
+}
+
 export default function Posts() {
 	const [posts, setPosts] = useState<post[]>([]);
 
@@ -16,8 +20,9 @@ export default function Posts() {
 				method: "GET",
 				credentials: "include",
 			});
-			const posts = await response.json();
-			setPosts(posts.posts);
+			const { posts } = (await response.json()) as postsResponse;
+			console.log(posts);
+			setPosts(posts);
 		}
 		fetchPosts();
 	}, []);
@@ -28,8 +33,11 @@ export default function Posts() {
 		<>
 			{posts.map((post: post) => (
 				<article className={styles.post} key={post.id}>
-					<div className={styles.postheader}>post.title</div>
-					<div className={styles.postcontent}>Lorem Ipsum</div>
+					<div className={styles.postheader}>
+						{post.first_name} {post.last_name}
+						<span className={`material-symbols-outlined ${styles.icon}`}>more_horiz</span>
+					</div>
+					<div className={styles.postcontent}>{post.text}</div>
 				</article>
 			))}
 		</>
