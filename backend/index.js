@@ -217,10 +217,11 @@ app.get("/api/posts", (req, res) => __awaiter(void 0, void 0, void 0, function* 
             res.status(401).send({ error: "Ingen/ogiltilg token" });
         }
         const result = yield client.query("SELECT posts.id, posts.text, posts.group_id, students.first_name, students.last_name FROM posts JOIN students ON posts.sender_id = students.id JOIN group_members ON posts.group_id = group_members.group_id WHERE group_members.student_id=$1", [studentId]);
+        console.log(result.rows);
         res.status(200).send({ posts: result.rows });
     }
     catch (error) {
-        console.log("Couldnt get posts");
+        console.log("Couldnt get posts", error);
         res.status(500).send({ error: "Vi kunde inte fetcha posterna." });
     }
 }));

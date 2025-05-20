@@ -5,6 +5,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import { Client, QueryResult } from "pg";
+import { log } from "console";
 
 /*
 	Frågor till Vanja/Jon handledning.
@@ -267,7 +268,6 @@ app.post("/api/logout", async (req, res) => {
 
 app.get("/api/posts", async (req, res) => {
 	console.log("Get Posts loggas");
-
 	try {
 		const token: string = req.cookies.token;
 		const studentId = parseInt(token);
@@ -278,9 +278,11 @@ app.get("/api/posts", async (req, res) => {
 			"SELECT posts.id, posts.text, posts.group_id, students.first_name, students.last_name FROM posts JOIN students ON posts.sender_id = students.id JOIN group_members ON posts.group_id = group_members.group_id WHERE group_members.student_id=$1",
 			[studentId]
 		);
+		console.log(result.rows);
+
 		res.status(200).send({ posts: result.rows });
 	} catch (error: unknown) {
-		console.log("Couldnt get posts");
+		console.log("Couldnt get posts", error);
 		res.status(500).send({ error: "Vi kunde inte fetcha posterna." });
 	}
 });
