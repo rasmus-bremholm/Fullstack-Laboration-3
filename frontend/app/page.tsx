@@ -10,7 +10,7 @@ import { group } from "./types/types";
 export default function Home() {
 	const [postText, setPostText] = useState("");
 	const [groups, setGroups] = useState<group[] | []>([]);
-	const [selectedGroup, setSelectedGroup] = useState(0);
+	const [selectedGroup, setSelectedGroup] = useState(1);
 	const [isFocused, setIsFocused] = useState(false);
 	const [disabeledSubmit, setDisabledSubmit] = useState(true);
 	// Min ful refetch gör en retur! Måste tvinga min child komponent att köra om useEffect.
@@ -51,6 +51,7 @@ export default function Home() {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({ text: postText, group_id: selectedGroup }),
+			credentials: "include",
 		});
 
 		if (response.ok) {

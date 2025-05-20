@@ -251,14 +251,19 @@ app.post("/api/posts", (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
     else {
         const { text, group_id } = req.body;
-        try {
-            yield client.query("INSERT INTO posts (sender_id, text, group_id) VALUES ($1,$2,$3)", [senderId, text, group_id]);
-            console.log("Post skapad!");
-            res.status(201).send({ message: "Post skickad" });
+        if (!req.body.group_id) {
+            res.status(401).send({ error: "Ingen groupID" });
         }
-        catch (error) {
-            console.error(error);
-            res.status(500).send({ error: "Något gick fel på servern" });
+        else {
+            try {
+                yield client.query("INSERT INTO posts (sender_id, text, group_id) VALUES ($1,$2,$3)", [senderId, text, group_id]);
+                console.log("Post skapad!");
+                res.status(201).send({ message: "Post skickad" });
+            }
+            catch (error) {
+                console.error(error);
+                res.status(500).send({ error: "Något gick fel på servern" });
+            }
         }
     }
 }));
