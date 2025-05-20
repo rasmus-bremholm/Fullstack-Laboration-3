@@ -203,6 +203,26 @@ app.delete("/api/students/:id", async (req, res) => {
 	}
 });
 
+// Groups
+app.get("/api/groups", async (req, res) => {
+	const token = req.cookies.token;
+	const studentId = parseInt(token);
+
+	if (isNaN(studentId)) {
+		res.status(401).send({ error: "Ingen/ogiltilg token" });
+	}
+
+	try {
+		const result = await client.query(
+			"SELECT groups.id, groups.name, groups.description FROM group_members JOIN groups ON group_members.group_id = groups.id WHERE group_members.student_id = $1",
+			[studentId]
+		);
+		res.status(200).send({ groups: result.rows });
+	} catch (error: unknown) {
+		
+	}
+});
+
 // Login
 
 app.post("/api/login", async (req, res) => {

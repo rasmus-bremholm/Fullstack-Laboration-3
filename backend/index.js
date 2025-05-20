@@ -157,6 +157,20 @@ app.delete("/api/students/:id", (req, res) => __awaiter(void 0, void 0, void 0, 
         res.status(500).send({ error: "Couldnt delete student" });
     }
 }));
+// Groups
+app.get("/api/groups", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const token = req.cookies.token;
+    const studentId = parseInt(token);
+    if (isNaN(studentId)) {
+        res.status(401).send({ error: "Ingen/ogiltilg token" });
+    }
+    try {
+        const result = yield client.query("SELECT groups.id, groups.name, groups.description FROM group_members JOIN groups ON group_members.group_id = groups.id WHERE group_members.student_id = $1", [studentId]);
+        res.status(200).send({ groups: result.rows });
+    }
+    catch (error) {
+    }
+}));
 // Login
 app.post("/api/login", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Login info sent to server: ", req.body);
@@ -203,6 +217,23 @@ app.get("/api/posts", (req, res) => __awaiter(void 0, void 0, void 0, function* 
     catch (error) {
         console.log("Couldnt get posts");
         res.status(500).send({ error: "Vi kunde inte fetcha posterna." });
+    }
+}));
+app.post("/api/posts", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const token = req.cookies.token;
+    const senderId = parseInt(token);
+    if (!senderId) {
+        res.status(401).send({ error: "Inte inloggad, kan inte posta" });
+    }
+    const { text, group_id } = req.body;
+    try {
+        yield client.query("INSERT INTO posts (sender_id, text, group_id) VALUES ($1,$2,$3)", [senderId, text, group_id]);
+        res.status(201).send({ message: "Post skickad" });
+        console.log("Post skapad!");
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).send({ error: "Något gick fel på servern" });
     }
 }));
 // Settingup server
