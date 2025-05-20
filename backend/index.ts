@@ -205,6 +205,7 @@ app.delete("/api/students/:id", async (req, res) => {
 
 // Groups
 app.get("/api/groups", async (req: Request, res: Response) => {
+	console.log("Get Groups loggas");
 	const token = req.cookies.token;
 	const studentId = parseInt(token);
 

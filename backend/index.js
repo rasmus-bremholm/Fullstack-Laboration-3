@@ -159,6 +159,7 @@ app.delete("/api/students/:id", (req, res) => __awaiter(void 0, void 0, void 0, 
 }));
 // Groups
 app.get("/api/groups", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("Get Groups loggas");
     const token = req.cookies.token;
     const studentId = parseInt(token);
     if (isNaN(studentId)) {
