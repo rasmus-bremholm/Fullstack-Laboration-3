@@ -34,8 +34,8 @@ export default function Home() {
 			});
 
 			if (response.ok) {
-				const data: group[] = await response.json();
-				setGroups(data);
+				const data = await response.json();
+				setGroups(data.groups);
 			} else {
 				console.error("Frontenden kunde inte ta emot grupperna");
 			}

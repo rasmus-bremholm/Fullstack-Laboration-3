@@ -91,7 +91,7 @@ app.get("/api/user", (req, res) => __awaiter(void 0, void 0, void 0, function* (
         //console.log(student, schedule, groups, events);
     }
     catch (error) {
-        res.status(500).json({ error: "Something went wrong, stupid" });
+        res.status(500).send({ error: "Something went wrong, stupid" });
     }
 }));
 app.get("/api/students/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {

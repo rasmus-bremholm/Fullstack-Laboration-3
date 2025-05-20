@@ -1,6 +1,6 @@
 // Imports
 import express from "express";
-import type { Request } from "express";
+import type { Request, Response } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
@@ -101,7 +101,7 @@ app.get("/api/students", async (_req, res) => {
 
 // Ok denna routen är den ultimata final bossen ifall min cookie auth fungerar.
 // Väldigt lik students/id fast nu läser jag enbart från cookies för att få mitt id. Vilket betyder att vi måste vara inloggade.
-app.get("/api/user", async (req, res) => {
+app.get("/api/user", async (req: Request, res: Response): Promise<void> => {
 	const token: string = req.cookies.token;
 	const studentId = parseInt(token);
 	if (isNaN(studentId)) {
@@ -122,7 +122,7 @@ app.get("/api/user", async (req, res) => {
 		res.status(200).send({ student: student.rows[0], schedule: schedule.rows, groups: groups.rows, events: events.rows });
 		//console.log(student, schedule, groups, events);
 	} catch (error) {
-		res.status(500).json({ error: "Something went wrong, stupid" });
+		res.status(500).send({ error: "Something went wrong, stupid" }) as Response;
 	}
 });
 
@@ -204,7 +204,7 @@ app.delete("/api/students/:id", async (req, res) => {
 });
 
 // Groups
-app.get("/api/groups", async (req, res) => {
+app.get("/api/groups", async (req: Request, res: Response) => {
 	const token = req.cookies.token;
 	const studentId = parseInt(token);
 
@@ -281,7 +281,7 @@ app.get("/api/posts", async (req, res) => {
 	}
 });
 
-app.post("/api/posts", async (req, res) => {
+app.post("/api/posts", async (req: Request, res: Response): Promise<void> => {
 	const token: string = req.cookies.token;
 	const senderId = parseInt(token);
 
