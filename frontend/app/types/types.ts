@@ -16,6 +16,8 @@ export interface shedule_event {
 
 export interface group {
 	id: number;
+	name: string;
+	description: string;
 }
 
 export interface post {

@@ -11,7 +11,11 @@ interface postsResponse {
 	posts: post[];
 }
 
-export default function Posts() {
+interface PostProps {
+	refetchTrigger: boolean;
+}
+
+export default function Posts(refetchTrigger: PostProps) {
 	const [posts, setPosts] = useState<post[]>([]);
 
 	useEffect(() => {
@@ -25,7 +29,7 @@ export default function Posts() {
 			setPosts(posts);
 		}
 		fetchPosts();
-	}, []);
+	}, [refetchTrigger]);
 
 	if (!posts) return <div>Logga in för att se dina poster....eller vänta på att backenden spinnar upp</div>;
 

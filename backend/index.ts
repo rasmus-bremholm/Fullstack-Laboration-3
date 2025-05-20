@@ -213,13 +213,14 @@ app.get("/api/groups", async (req, res) => {
 	}
 
 	try {
-		const result = await client.query(
+		const result = await client.query<Group>(
 			"SELECT groups.id, groups.name, groups.description FROM group_members JOIN groups ON group_members.group_id = groups.id WHERE group_members.student_id = $1",
 			[studentId]
 		);
 		res.status(200).send({ groups: result.rows });
 	} catch (error: unknown) {
-		
+		console.error(error);
+		res.status(500).send({ error: "Failed to get groups" });
 	}
 });
 

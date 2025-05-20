@@ -169,6 +169,8 @@ app.get("/api/groups", (req, res) => __awaiter(void 0, void 0, void 0, function*
         res.status(200).send({ groups: result.rows });
     }
     catch (error) {
+        console.error(error);
+        res.status(500).send({ error: "Failed to get groups" });
     }
 }));
 // Login
