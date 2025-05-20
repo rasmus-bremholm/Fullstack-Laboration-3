@@ -175,6 +175,7 @@ app.get("/api/groups", (req, res) => __awaiter(void 0, void 0, void 0, function*
 }));
 // Login
 app.post("/api/login", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("Post Login");
     console.log("Login info sent to server: ", req.body);
     try {
         const { email, password } = req.body;
@@ -207,6 +208,7 @@ app.post("/api/logout", (req, res) => __awaiter(void 0, void 0, void 0, function
 }));
 // Posts
 app.get("/api/posts", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("Get Posts loggas");
     try {
         const token = req.cookies.token;
         const studentId = parseInt(token);
@@ -222,9 +224,11 @@ app.get("/api/posts", (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 }));
 app.post("/api/posts", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("Post Post loggas");
     const token = req.cookies.token;
     const senderId = parseInt(token);
     if (!senderId) {
+        console.log("Ingen cookie");
         res.status(401).send({ error: "Inte inloggad, kan inte posta" });
     }
     else {

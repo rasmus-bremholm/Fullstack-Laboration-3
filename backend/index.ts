@@ -227,6 +227,7 @@ app.get("/api/groups", async (req: Request, res: Response) => {
 // Login
 
 app.post("/api/login", async (req, res) => {
+	console.log("Post Login");
 	console.log("Login info sent to server: ", req.body);
 
 	try {
@@ -264,6 +265,8 @@ app.post("/api/logout", async (req, res) => {
 // Posts
 
 app.get("/api/posts", async (req, res) => {
+	console.log("Get Posts loggas");
+
 	try {
 		const token: string = req.cookies.token;
 		const studentId = parseInt(token);
@@ -282,10 +285,12 @@ app.get("/api/posts", async (req, res) => {
 });
 
 app.post("/api/posts", async (req: Request, res: Response) => {
+	console.log("Post Post loggas");
 	const token: string = req.cookies.token;
 	const senderId = parseInt(token);
 
 	if (!senderId) {
+		console.log("Ingen cookie");
 		res.status(401).send({ error: "Inte inloggad, kan inte posta" });
 	} else {
 		const { text, group_id } = req.body;
