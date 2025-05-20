@@ -82,16 +82,18 @@ app.get("/api/user", (req, res) => __awaiter(void 0, void 0, void 0, function* (
     if (isNaN(studentId)) {
         res.status(400).send({ error: "Ingen giltig token" });
     }
-    try {
-        const student = yield client.query("SELECT * FROM students WHERE id=$1", [studentId]);
-        const schedule = yield client.query("SELECT weekday, start_time, end_time FROM weekly_schedule WHERE student_id=$1", [studentId]);
-        const groups = yield client.query("SELECT groups.id, groups.name, groups.description FROM group_members JOIN groups ON groups.id = group_members.group_id WHERE group_members.student_id=$1", [studentId]);
-        const events = yield client.query("SELECT events.* FROM events JOIN group_members ON events.group_id = group_members.group_id WHERE group_members.student_id=$1", [studentId]);
-        res.status(200).send({ student: student.rows[0], schedule: schedule.rows, groups: groups.rows, events: events.rows });
-        //console.log(student, schedule, groups, events);
-    }
-    catch (error) {
-        res.status(500).send({ error: "Something went wrong, stupid" });
+    else {
+        try {
+            const student = yield client.query("SELECT * FROM students WHERE id=$1", [studentId]);
+            const schedule = yield client.query("SELECT weekday, start_time, end_time FROM weekly_schedule WHERE student_id=$1", [studentId]);
+            const groups = yield client.query("SELECT groups.id, groups.name, groups.description FROM group_members JOIN groups ON groups.id = group_members.group_id WHERE group_members.student_id=$1", [studentId]);
+            const events = yield client.query("SELECT events.* FROM events JOIN group_members ON events.group_id = group_members.group_id WHERE group_members.student_id=$1", [studentId]);
+            res.status(200).send({ student: student.rows[0], schedule: schedule.rows, groups: groups.rows, events: events.rows });
+            //console.log(student, schedule, groups, events);
+        }
+        catch (error) {
+            res.status(500).send({ error: "Something went wrong, stupid" });
+        }
     }
 }));
 app.get("/api/students/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -99,16 +101,18 @@ app.get("/api/students/:id", (req, res) => __awaiter(void 0, void 0, void 0, fun
     if (isNaN(studentId)) {
         res.status(400).send({ error: "Id needs to be a number" });
     }
-    try {
-        const student = yield client.query("SELECT * FROM students WHERE id=$1", [studentId]);
-        const schedule = yield client.query("SELECT weekday, start_time, end_time FROM weekly_schedule WHERE student_id=$1", [studentId]);
-        const groups = yield client.query("SELECT groups.id, groups.name, groups.description FROM group_members JOIN groups ON groups.id = group_members.group_id WHERE group_members.student_id=$1", [studentId]);
-        const events = yield client.query("SELECT events.* FROM events JOIN group_members ON events.group_id = group_members.group_id WHERE group_members.student_id=$1", [studentId]);
-        res.status(200).send({ student: student.rows[0], schedule: schedule.rows, groups: groups.rows, events: events.rows });
-        console.log(student, schedule, groups, events);
-    }
-    catch (error) {
-        res.status(500).json({ error: "Something went wrong, stupid" });
+    else {
+        try {
+            const student = yield client.query("SELECT * FROM students WHERE id=$1", [studentId]);
+            const schedule = yield client.query("SELECT weekday, start_time, end_time FROM weekly_schedule WHERE student_id=$1", [studentId]);
+            const groups = yield client.query("SELECT groups.id, groups.name, groups.description FROM group_members JOIN groups ON groups.id = group_members.group_id WHERE group_members.student_id=$1", [studentId]);
+            const events = yield client.query("SELECT events.* FROM events JOIN group_members ON events.group_id = group_members.group_id WHERE group_members.student_id=$1", [studentId]);
+            res.status(200).send({ student: student.rows[0], schedule: schedule.rows, groups: groups.rows, events: events.rows });
+            console.log(student, schedule, groups, events);
+        }
+        catch (error) {
+            res.status(500).json({ error: "Something went wrong, stupid" });
+        }
     }
 }));
 app.post("/api/students", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -132,14 +136,16 @@ app.put("/api/students/:id", (req, res) => __awaiter(void 0, void 0, void 0, fun
     if (isNaN(studentId)) {
         res.status(400).send({ error: "Id needs to be a number" });
     }
-    try {
-        const result = yield client.query("UPDATE students SET first_name=$2, last_name=$3, email=$4, password=$5, profile_picture=$6 WHERE id=$1", [studentId, req.body.first_name, req.body.last_name, req.body.email, req.body.password, req.body.profile_picture]);
-        if (result.rowCount && result.rowCount > 0) {
-            res.status(200).send({ message: "Updated student information" });
+    else {
+        try {
+            const result = yield client.query("UPDATE students SET first_name=$2, last_name=$3, email=$4, password=$5, profile_picture=$6 WHERE id=$1", [studentId, req.body.first_name, req.body.last_name, req.body.email, req.body.password, req.body.profile_picture]);
+            if (result.rowCount && result.rowCount > 0) {
+                res.status(200).send({ message: "Updated student information" });
+            }
         }
-    }
-    catch (error) {
-        res.status(500).send({ error: "Couldnt update student" });
+        catch (error) {
+            res.status(500).send({ error: "Couldnt update student" });
+        }
     }
 }));
 app.delete("/api/students/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -147,14 +153,16 @@ app.delete("/api/students/:id", (req, res) => __awaiter(void 0, void 0, void 0, 
     if (isNaN(studentId)) {
         res.status(400).send({ error: "Id needs to be a number" });
     }
-    try {
-        const result = yield client.query("DELETE FROM students WHERE id=$1", [studentId]);
-        if (result.rowCount && result.rowCount > 0) {
-            res.status(204).send({ message: "Student Deleted" });
+    else {
+        try {
+            const result = yield client.query("DELETE FROM students WHERE id=$1", [studentId]);
+            if (result.rowCount && result.rowCount > 0) {
+                res.status(204).send({ message: "Student Deleted" });
+            }
         }
-    }
-    catch (error) {
-        res.status(500).send({ error: "Couldnt delete student" });
+        catch (error) {
+            res.status(500).send({ error: "Couldnt delete student" });
+        }
     }
 }));
 // Groups
@@ -165,13 +173,15 @@ app.get("/api/groups", (req, res) => __awaiter(void 0, void 0, void 0, function*
     if (isNaN(studentId)) {
         res.status(401).send({ error: "Ingen/ogiltilg token" });
     }
-    try {
-        const result = yield client.query("SELECT groups.id, groups.name, groups.description FROM group_members JOIN groups ON group_members.group_id = groups.id WHERE group_members.student_id = $1", [studentId]);
-        res.status(200).send({ groups: result.rows });
-    }
-    catch (error) {
-        console.error(error);
-        res.status(500).send({ error: "Failed to get groups" });
+    else {
+        try {
+            const result = yield client.query("SELECT groups.id, groups.name, groups.description FROM group_members JOIN groups ON group_members.group_id = groups.id WHERE group_members.student_id = $1", [studentId]);
+            res.status(200).send({ groups: result.rows });
+        }
+        catch (error) {
+            console.error(error);
+            res.status(500).send({ error: "Failed to get groups" });
+        }
     }
 }));
 // Login
@@ -186,16 +196,18 @@ app.post("/api/login", (req, res) => __awaiter(void 0, void 0, void 0, function*
         if (!user || user.password !== password) {
             res.status(401).send({ error: "Invalid Email or Password" });
         }
-        res.cookie("token", user.id, {
-            httpOnly: true,
-            secure: true,
-            // Denna jäveln!!!!
-            sameSite: "none",
-            path: "/",
-            maxAge: 60 * 60 * 24, // Detta borde vara en dag ifall jag räknat rätt.
-        });
-        console.log("Setting cookie for user: ", user.id);
-        res.status(200).send({ sucess: true, id: user.id });
+        else {
+            res.cookie("token", user.id, {
+                httpOnly: true,
+                secure: true,
+                // Denna jäveln!!!!
+                sameSite: "none",
+                path: "/",
+                maxAge: 60 * 60 * 24, // Detta borde vara en dag ifall jag räknat rätt.
+            });
+            console.log("Setting cookie for user: ", user.id);
+            res.status(200).send({ sucess: true, id: user.id });
+        }
     }
     catch (error) {
         console.log("Login Error", error);
@@ -217,10 +229,12 @@ app.get("/api/posts", (req, res) => __awaiter(void 0, void 0, void 0, function* 
         if (isNaN(studentId)) {
             res.status(401).send({ error: "Ingen/ogiltilg token" });
         }
-        console.log("Student ID Efter", studentId);
-        const result = yield client.query("SELECT posts.id, posts.text, posts.group_id, students.first_name, students.last_name FROM posts JOIN students ON posts.sender_id = students.id JOIN group_members ON posts.group_id = group_members.group_id WHERE group_members.student_id=$1", [studentId]);
-        console.log(result.rows);
-        res.status(200).send({ posts: result.rows });
+        else {
+            console.log("Student ID Efter", studentId);
+            const result = yield client.query("SELECT posts.id, posts.text, posts.group_id, students.first_name, students.last_name FROM posts JOIN students ON posts.sender_id = students.id JOIN group_members ON posts.group_id = group_members.group_id WHERE group_members.student_id=$1", [studentId]);
+            console.log(result.rows);
+            res.status(200).send({ posts: result.rows });
+        }
     }
     catch (error) {
         console.log("Couldnt get posts", error);
