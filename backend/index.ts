@@ -260,6 +260,25 @@ app.get("/api/posts", async (req, res) => {
 	}
 });
 
+app.post("/api/posts", async (req, res) => {
+	const token: string = req.cookies.token;
+	const senderId = parseInt(token);
+
+	if (!senderId) {
+		res.status(401).send({ error: "Inte inloggad, kan inte posta" });
+	}
+
+	const { text, group_id } = req.body;
+	try {
+		await client.query("INSERT INTO posts (sender_id, text, group_id) VALUES ($1,$2,$3)", [senderId, text, group_id]);
+		res.status(201).send({ message: "Post skickad" });
+		console.log("Post skapad!");
+	} catch (error: unknown) {
+		console.error(error);
+		res.status(500).send({ error: "Något gick fel på servern" });
+	}
+});
+
 // Settingup server
 
 app.listen(port, () => {

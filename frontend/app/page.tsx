@@ -20,16 +20,22 @@ export default function Home() {
 		}
 	}, [postText]);
 
-	const handleSubmit = () => {
+	const handleSubmit = async (event: React.FormEvent) => {
 		// Hello
-		event?.preventDefault();
+		event.preventDefault();
+
+		const response = await fetch("https://fullstack-laboration-3.onrender.com/api/posts",{
+			method: "POST",
+			headers: {"Content-Type": "application/json"},
+			body: JSON.stringify({})
+		});
 		setPostText("");
 	};
 
 	return (
 		<div className={styles.feed}>
 			<div className={styles.createpost}>
-				<form action={handleSubmit}>
+				<form onSubmit={handleSubmit}>
 					<div className={styles.inputcontainer}>
 						<Image className={extrastyles.icons} src={"/images/default-avatar.png"} alt='avatar' width={24} height={24} />
 						<textarea

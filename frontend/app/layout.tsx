@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 
 import Navbar from "./components/Navbar";
+import { AuthProvider } from "./utils/authcontext";
 
 // Inter funkar bra här.
 const inter = Inter({
@@ -23,10 +24,12 @@ export default function RootLayout({
 	return (
 		<html lang='en'>
 			<body className={`${inter.variable}`}>
-				<div className='grid-container'>
-					<Navbar />
-					<main>{children}</main>
-				</div>
+				<AuthProvider>
+					<div className='grid-container'>
+						<Navbar />
+						<main>{children}</main>
+					</div>
+				</AuthProvider>
 			</body>
 		</html>
 	);
