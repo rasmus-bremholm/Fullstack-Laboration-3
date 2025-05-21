@@ -80,24 +80,18 @@ app.get("/api/students", (_req, res) => __awaiter(void 0, void 0, void 0, functi
 }));
 // Ok denna routen är den ultimata final bossen ifall min cookie auth fungerar.
 // Väldigt lik students/id fast nu läser jag enbart från cookies för att få mitt id. Vilket betyder att vi måste vara inloggade.
-app.get("/api/user", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const token = req.cookies.token;
-    const studentId = parseInt(token);
-    if (isNaN(studentId)) {
-        res.status(400).send({ error: "Ingen giltig token" });
+app.get("/api/user", authToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const studentId = req.user.id;
+    try {
+        const student = yield client.query("SELECT * FROM students WHERE id=$1", [studentId]);
+        const schedule = yield client.query("SELECT weekday, start_time, end_time FROM weekly_schedule WHERE student_id=$1", [studentId]);
+        const groups = yield client.query("SELECT groups.id, groups.name, groups.description FROM group_members JOIN groups ON groups.id = group_members.group_id WHERE group_members.student_id=$1", [studentId]);
+        const events = yield client.query("SELECT events.* FROM events JOIN group_members ON events.group_id = group_members.group_id WHERE group_members.student_id=$1", [studentId]);
+        res.status(200).send({ student: student.rows[0], schedule: schedule.rows, groups: groups.rows, events: events.rows });
+        //console.log(student, schedule, groups, events);
     }
-    else {
-        try {
-            const student = yield client.query("SELECT * FROM students WHERE id=$1", [studentId]);
-            const schedule = yield client.query("SELECT weekday, start_time, end_time FROM weekly_schedule WHERE student_id=$1", [studentId]);
-            const groups = yield client.query("SELECT groups.id, groups.name, groups.description FROM group_members JOIN groups ON groups.id = group_members.group_id WHERE group_members.student_id=$1", [studentId]);
-            const events = yield client.query("SELECT events.* FROM events JOIN group_members ON events.group_id = group_members.group_id WHERE group_members.student_id=$1", [studentId]);
-            res.status(200).send({ student: student.rows[0], schedule: schedule.rows, groups: groups.rows, events: events.rows });
-            //console.log(student, schedule, groups, events);
-        }
-        catch (error) {
-            res.status(500).send({ error: "Something went wrong, stupid" });
-        }
+    catch (error) {
+        res.status(500).send({ error: "Something went wrong, stupid" });
     }
 }));
 app.get("/api/students/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {

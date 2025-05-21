@@ -1,4 +1,5 @@
 "use client";
+
 import { post } from "../types/types";
 import styles from "../styles/posts.module.css";
 import { useEffect, useState } from "react";
@@ -6,7 +7,6 @@ import { useEffect, useState } from "react";
 // const url = process.env.BACKEND_URL;
 const url = "https://fullstack-laboration-3.onrender.com";
 // https://fullstack-laboration-3.onrender.com
-const token = localStorage.getItem("token");
 
 interface postsResponse {
 	posts: post[];
@@ -20,6 +20,7 @@ export default function Posts(refetchTrigger: PostProps) {
 	const [posts, setPosts] = useState<post[]>([]);
 
 	useEffect(() => {
+		const token = localStorage.getItem("token");
 		async function fetchPosts() {
 			const response = await fetch(`${url}/api/posts`, {
 				method: "GET",

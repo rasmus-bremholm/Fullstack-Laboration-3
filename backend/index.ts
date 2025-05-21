@@ -108,28 +108,23 @@ app.get("/api/students", async (_req, res) => {
 
 // Ok denna routen är den ultimata final bossen ifall min cookie auth fungerar.
 // Väldigt lik students/id fast nu läser jag enbart från cookies för att få mitt id. Vilket betyder att vi måste vara inloggade.
-app.get("/api/user", async (req: Request, res: Response) => {
-	const token: string = req.cookies.token;
-	const studentId = parseInt(token);
-	if (isNaN(studentId)) {
-		res.status(400).send({ error: "Ingen giltig token" });
-	} else {
-		try {
-			const student = await client.query<Student>("SELECT * FROM students WHERE id=$1", [studentId]);
-			const schedule = await client.query<Shedule>("SELECT weekday, start_time, end_time FROM weekly_schedule WHERE student_id=$1", [studentId]);
-			const groups = await client.query<Group>(
-				"SELECT groups.id, groups.name, groups.description FROM group_members JOIN groups ON groups.id = group_members.group_id WHERE group_members.student_id=$1",
-				[studentId]
-			);
-			const events = await client.query<Event>(
-				"SELECT events.* FROM events JOIN group_members ON events.group_id = group_members.group_id WHERE group_members.student_id=$1",
-				[studentId]
-			);
-			res.status(200).send({ student: student.rows[0], schedule: schedule.rows, groups: groups.rows, events: events.rows });
-			//console.log(student, schedule, groups, events);
-		} catch (error) {
-			res.status(500).send({ error: "Something went wrong, stupid" }) as Response;
-		}
+app.get("/api/user", authToken, async (req: AuthRequest, res: Response) => {
+	const studentId = req.user!.id;
+	try {
+		const student = await client.query<Student>("SELECT * FROM students WHERE id=$1", [studentId]);
+		const schedule = await client.query<Shedule>("SELECT weekday, start_time, end_time FROM weekly_schedule WHERE student_id=$1", [studentId]);
+		const groups = await client.query<Group>(
+			"SELECT groups.id, groups.name, groups.description FROM group_members JOIN groups ON groups.id = group_members.group_id WHERE group_members.student_id=$1",
+			[studentId]
+		);
+		const events = await client.query<Event>(
+			"SELECT events.* FROM events JOIN group_members ON events.group_id = group_members.group_id WHERE group_members.student_id=$1",
+			[studentId]
+		);
+		res.status(200).send({ student: student.rows[0], schedule: schedule.rows, groups: groups.rows, events: events.rows });
+		//console.log(student, schedule, groups, events);
+	} catch (error) {
+		res.status(500).send({ error: "Something went wrong, stupid" }) as Response;
 	}
 });
 
