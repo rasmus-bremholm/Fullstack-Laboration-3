@@ -185,6 +185,7 @@ app.get("/api/groups", (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 }));
 // Login
+// Have to go to a JWT based sollution
 app.post("/api/login", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Post Login");
     console.log("Login info sent to server: ", req.body);
