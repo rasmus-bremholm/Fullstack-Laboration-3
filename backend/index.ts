@@ -1,16 +1,11 @@
 // Imports
 import express from "express";
-import type { Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import { Client, QueryResult } from "pg";
-import { log } from "console";
-
-/*
-	Frågor till Vanja/Jon handledning.
-
-*/
+import jwt from "jsonwebtoken";
 
 /*
 	TODO:
@@ -22,6 +17,7 @@ import { log } from "console";
 const port = process.env.PORT || 1338;
 // Fy fan för cors. Nära att faila hela labben här och bara gråta.
 const allowedOrigins = ["http://localhost:3000", "http://localhost:1338", "https://fullstack-laboration-3.vercel.app"];
+const JWT_SECRET = process.env.JWT_SECRET || "dev-secret";
 
 // Initialisation
 const app = express();
@@ -73,16 +69,26 @@ interface LoginFormData {
 	password: string;
 }
 
-// Helper functions
-const getUserIdFromCookies = (req: Request): number | null => {
-	const token = req.cookies.token;
-	const userId = parseInt(token);
-	if (isNaN(userId)) {
-		return null;
-	} else {
-		return userId;
+interface AuthRequest extends Request {
+	user?: { id: number; email: string };
+}
+
+// Middleware
+function authToken(req: AuthRequest, res: Response, next: NextFunction) {
+	const authHeader = req.headers.authorization;
+
+	if (!authHeader) res.status(401).send({ error: "Middleware: Missing token" });
+	else {
+		const token = authHeader.split(" ")[1];
+		try {
+			const decodedToken = jwt.verify(token, JWT_SECRET) as { id: number; email: string };
+			req.user = decodedToken;
+			next();
+		} catch (error) {
+			res.status(403).send({ error: "Middleware: Invalid Token" });
+		}
 	}
-};
+}
 
 //--------------------------------------------------------------------
 // Routes
@@ -206,24 +212,18 @@ app.delete("/api/students/:id", async (req, res) => {
 });
 
 // Groups
-app.get("/api/groups", async (req: Request, res: Response) => {
+app.get("/api/groups", authToken, async (req: AuthRequest, res: Response) => {
 	console.log("Get Groups loggas");
-	const token = req.cookies.token;
-	const studentId = parseInt(token);
-
-	if (isNaN(studentId)) {
-		res.status(401).send({ error: "Ingen/ogiltilg token" });
-	} else {
-		try {
-			const result = await client.query<Group>(
-				"SELECT groups.id, groups.name, groups.description FROM group_members JOIN groups ON group_members.group_id = groups.id WHERE group_members.student_id = $1",
-				[studentId]
-			);
-			res.status(200).send({ groups: result.rows });
-		} catch (error: unknown) {
-			console.error(error);
-			res.status(500).send({ error: "Failed to get groups" });
-		}
+	const studentId = req.user!.id;
+	try {
+		const result = await client.query<Group>(
+			"SELECT groups.id, groups.name, groups.description FROM group_members JOIN groups ON group_members.group_id = groups.id WHERE group_members.student_id = $1",
+			[studentId]
+		);
+		res.status(200).send({ groups: result.rows });
+	} catch (error: unknown) {
+		console.error(error);
+		res.status(500).send({ error: "Failed to get groups" });
 	}
 });
 
@@ -231,28 +231,18 @@ app.get("/api/groups", async (req: Request, res: Response) => {
 // Have to go to a JWT based sollution
 
 app.post("/api/login", async (req, res) => {
-	console.log("Post Login");
 	console.log("Login info sent to server: ", req.body);
-
 	try {
 		const { email, password }: LoginFormData = req.body;
 		const result = await client.query("SELECT * FROM students WHERE email=$1", [email]);
 		const user: Student = result.rows[0];
 
-		// Validerar alla uppgifter
 		if (!user || user.password !== password) {
 			res.status(401).send({ error: "Invalid Email or Password" });
 		} else {
-			res.cookie("token", user.id, {
-				httpOnly: true,
-				secure: true,
-				// Denna jäveln!!!!
-				sameSite: "none",
-				path: "/",
-				maxAge: 60 * 60 * 24, // Detta borde vara en dag ifall jag räknat rätt.
-			});
-			console.log("Setting cookie for user: ", user.id);
-			res.status(200).send({ sucess: true, id: user.id });
+			const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: "1d" });
+			console.log("Genererade Token för user: ", user.id);
+			res.status(200).send({ success: true, token });
 		}
 	} catch (error: unknown) {
 		console.log("Login Error", error);
@@ -261,32 +251,23 @@ app.post("/api/login", async (req, res) => {
 });
 
 app.post("/api/logout", async (req, res) => {
-	// Logout
-	res.clearCookie("token");
+	// Client tar bort jwt tokenen.
 	res.status(204).send({ message: "Logged out" });
 });
 
 // Posts
 
-app.get("/api/posts", async (req, res) => {
+app.get("/api/posts", authToken, async (req: AuthRequest, res: Response) => {
 	console.log("Get Posts loggas");
+	const studentId = req.user!.id;
 	try {
-		const token: string = req.cookies.token;
-		const studentId = parseInt(token);
-		console.log("Student ID Innan", studentId);
-		if (isNaN(studentId)) {
-			res.status(401).send({ error: "Ingen/ogiltilg token" });
-		} else {
-			console.log("Student ID Efter", studentId);
+		const result = await client.query(
+			"SELECT posts.id, posts.text, posts.group_id, students.first_name, students.last_name FROM posts JOIN students ON posts.sender_id = students.id JOIN group_members ON posts.group_id = group_members.group_id WHERE group_members.student_id=$1",
+			[studentId]
+		);
+		console.log(result.rows);
 
-			const result = await client.query(
-				"SELECT posts.id, posts.text, posts.group_id, students.first_name, students.last_name FROM posts JOIN students ON posts.sender_id = students.id JOIN group_members ON posts.group_id = group_members.group_id WHERE group_members.student_id=$1",
-				[studentId]
-			);
-			console.log(result.rows);
-
-			res.status(200).send({ posts: result.rows });
-		}
+		res.status(200).send({ posts: result.rows });
 	} catch (error: unknown) {
 		console.log("Couldnt get posts", error);
 		res.status(500).send({ error: "Vi kunde inte fetcha posterna." });

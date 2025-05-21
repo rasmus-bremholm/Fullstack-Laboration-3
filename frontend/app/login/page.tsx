@@ -25,10 +25,11 @@ export default function Login() {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({ email: userLoginDetails.email, password: userLoginDetails.password }),
-			credentials: "include",
 		});
 
 		if (response.ok) {
+			const data = await response.json();
+			localStorage.setItem("token", data.token);
 			console.log("Vi loggade in");
 			router.push("/");
 		} else {

@@ -51,17 +51,19 @@ const client = new pg_1.Client({
     connectionString: process.env.PGURI,
 });
 client.connect();
-// Helper functions
-const getUserIdFromCookies = (req) => {
-    const token = req.cookies.token;
-    const userId = parseInt(token);
-    if (isNaN(userId)) {
-        return null;
-    }
+// Middleware
+function authToken(req, res, next) {
+    const authHeader = req.headers.authorization;
+    if (!authHeader)
+        return res.status(401).send({ error: "Middleware: Missing token" });
     else {
-        return userId;
+        try {
+            const decodedToken = jwt.verify();
+        }
+        catch (error) {
+        }
     }
-};
+}
 //--------------------------------------------------------------------
 // Routes
 //--------------------------------------------------------------------
