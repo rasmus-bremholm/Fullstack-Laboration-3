@@ -88,6 +88,9 @@ export default function Home() {
 							Post
 						</button>
 						<select onChange={(event) => setSelectedGroup(Number(event.target.value))}>
+							<option value={""} disabled hidden>
+								Select Group
+							</option>
 							{groups.map((group) => (
 								<option key={group.id} value={group.id}>
 									{group.name}

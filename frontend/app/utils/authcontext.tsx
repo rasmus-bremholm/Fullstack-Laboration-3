@@ -25,9 +25,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
 	// När Auth providern körs, så körs automagiskt denna funktionen som en vanlig useEffect, najs!
 	useEffect(() => {
+		const token = localStorage.getItem("token");
 		async function checkAuth() {
 			const respons = await fetch("https://fullstack-laboration-3.onrender.com/api/user", {
-				credentials: "include",
+				headers: { Authorization: `Bearer ${token}` },
 			});
 
 			if (respons.ok) {
