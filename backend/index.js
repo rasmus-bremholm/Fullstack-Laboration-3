@@ -39,6 +39,8 @@ app.use((0, cors_1.default)({
             callback(null, true);
         }
         else {
+            // Nu kan ja få reda på vilka origins som blockas.
+            console.warn("CORS blocked origin", origin);
             callback(new Error("Cors funkade inte"));
         }
     },
