@@ -274,12 +274,11 @@ app.get("/api/posts", authToken, async (req: AuthRequest, res: Response) => {
 	}
 });
 
-app.post("/api/posts", async (req: Request, res: Response) => {
+app.post("/api/posts", authToken, async (req: AuthRequest, res: Response) => {
 	console.log("Post Post loggas");
-	const token: string = req.cookies.token;
-	const senderId = parseInt(token);
+	const studentId = req.user!.id;
 
-	if (!senderId) {
+	if (!studentId) {
 		console.log("Ingen cookie");
 		res.status(401).send({ error: "Inte inloggad, kan inte posta" });
 	} else {
@@ -288,7 +287,7 @@ app.post("/api/posts", async (req: Request, res: Response) => {
 			res.status(401).send({ error: "Ingen groupID" });
 		} else {
 			try {
-				await client.query("INSERT INTO posts (sender_id, text, group_id) VALUES ($1,$2,$3)", [senderId, text, group_id]);
+				await client.query("INSERT INTO posts (sender_id, text, group_id) VALUES ($1,$2,$3)", [studentId, text, group_id]);
 				console.log("Post skapad!");
 				res.status(201).send({ message: "Post skickad" });
 			} catch (error: unknown) {

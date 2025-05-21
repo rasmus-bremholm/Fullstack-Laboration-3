@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 // const url = process.env.BACKEND_URL;
 const url = "https://fullstack-laboration-3.onrender.com";
 // https://fullstack-laboration-3.onrender.com
+const token = localStorage.getItem("token");
 
 interface postsResponse {
 	posts: post[];
@@ -22,7 +23,7 @@ export default function Posts(refetchTrigger: PostProps) {
 		async function fetchPosts() {
 			const response = await fetch(`${url}/api/posts`, {
 				method: "GET",
-				credentials: "include",
+				headers: { Authorization: `Bearer ${token}` },
 			});
 			const { posts } = (await response.json()) as postsResponse;
 			console.log(posts);

@@ -222,11 +222,10 @@ app.get("/api/posts", authToken, (req, res) => __awaiter(void 0, void 0, void 0,
         res.status(500).send({ error: "Vi kunde inte fetcha posterna." });
     }
 }));
-app.post("/api/posts", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post("/api/posts", authToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Post Post loggas");
-    const token = req.cookies.token;
-    const senderId = parseInt(token);
-    if (!senderId) {
+    const studentId = req.user.id;
+    if (!studentId) {
         console.log("Ingen cookie");
         res.status(401).send({ error: "Inte inloggad, kan inte posta" });
     }
@@ -237,7 +236,7 @@ app.post("/api/posts", (req, res) => __awaiter(void 0, void 0, void 0, function*
         }
         else {
             try {
-                yield client.query("INSERT INTO posts (sender_id, text, group_id) VALUES ($1,$2,$3)", [senderId, text, group_id]);
+                yield client.query("INSERT INTO posts (sender_id, text, group_id) VALUES ($1,$2,$3)", [studentId, text, group_id]);
                 console.log("Post skapad!");
                 res.status(201).send({ message: "Post skickad" });
             }

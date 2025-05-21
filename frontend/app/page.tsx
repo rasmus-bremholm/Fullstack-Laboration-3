@@ -28,9 +28,11 @@ export default function Home() {
 	}, [postText, groups]);
 
 	useEffect(() => {
+		const token = localStorage.getItem("token");
 		async function GetGroups() {
 			const response = await fetch("https://fullstack-laboration-3.onrender.com/api/groups", {
-				credentials: "include",
+				method: "GET",
+				headers: { Authorization: `Bearer ${token}` },
 			});
 
 			if (response.ok) {
@@ -44,14 +46,13 @@ export default function Home() {
 	}, []);
 
 	const handleSubmit = async (event: React.FormEvent) => {
-		// Hello
+		const token = localStorage.getItem("token");
 		event.preventDefault();
 
 		const response = await fetch("https://fullstack-laboration-3.onrender.com/api/posts", {
 			method: "POST",
-			headers: { "Content-Type": "application/json" },
+			headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
 			body: JSON.stringify({ text: postText, group_id: selectedGroup }),
-			credentials: "include",
 		});
 
 		if (response.ok) {
