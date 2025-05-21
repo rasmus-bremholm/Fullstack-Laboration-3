@@ -18,10 +18,7 @@ const cors_1 = __importDefault(require("cors"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const pg_1 = require("pg");
-/*
-    Frågor till Vanja/Jon handledning.
-
-*/
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 /*
     TODO:
     - Fixa "avatar" bilden i databasen. Måste bara lägga till typen här så den kommer med.
@@ -31,6 +28,7 @@ const pg_1 = require("pg");
 const port = process.env.PORT || 1338;
 // Fy fan för cors. Nära att faila hela labben här och bara gråta.
 const allowedOrigins = ["http://localhost:3000", "http://localhost:1338", "https://fullstack-laboration-3.vercel.app"];
+const JWT_SECRET = process.env.JWT_SECRET || "dev-secret";
 // Initialisation
 const app = (0, express_1.default)();
 app.use((0, cookie_parser_1.default)());
@@ -55,12 +53,16 @@ client.connect();
 function authToken(req, res, next) {
     const authHeader = req.headers.authorization;
     if (!authHeader)
-        return res.status(401).send({ error: "Middleware: Missing token" });
+        res.status(401).send({ error: "Middleware: Missing token" });
     else {
+        const token = authHeader.split(" ")[1];
         try {
-            const decodedToken = jwt.verify();
+            const decodedToken = jsonwebtoken_1.default.verify(token, JWT_SECRET);
+            req.user = decodedToken;
+            next();
         }
         catch (error) {
+            res.status(403).send({ error: "Middleware: Invalid Token" });
         }
     }
 }
@@ -168,48 +170,33 @@ app.delete("/api/students/:id", (req, res) => __awaiter(void 0, void 0, void 0, 
     }
 }));
 // Groups
-app.get("/api/groups", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.get("/api/groups", authToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Get Groups loggas");
-    const token = req.cookies.token;
-    const studentId = parseInt(token);
-    if (isNaN(studentId)) {
-        res.status(401).send({ error: "Ingen/ogiltilg token" });
+    const studentId = req.user.id;
+    try {
+        const result = yield client.query("SELECT groups.id, groups.name, groups.description FROM group_members JOIN groups ON group_members.group_id = groups.id WHERE group_members.student_id = $1", [studentId]);
+        res.status(200).send({ groups: result.rows });
     }
-    else {
-        try {
-            const result = yield client.query("SELECT groups.id, groups.name, groups.description FROM group_members JOIN groups ON group_members.group_id = groups.id WHERE group_members.student_id = $1", [studentId]);
-            res.status(200).send({ groups: result.rows });
-        }
-        catch (error) {
-            console.error(error);
-            res.status(500).send({ error: "Failed to get groups" });
-        }
+    catch (error) {
+        console.error(error);
+        res.status(500).send({ error: "Failed to get groups" });
     }
 }));
 // Login
 // Have to go to a JWT based sollution
 app.post("/api/login", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("Post Login");
     console.log("Login info sent to server: ", req.body);
     try {
         const { email, password } = req.body;
         const result = yield client.query("SELECT * FROM students WHERE email=$1", [email]);
         const user = result.rows[0];
-        // Validerar alla uppgifter
         if (!user || user.password !== password) {
             res.status(401).send({ error: "Invalid Email or Password" });
         }
         else {
-            res.cookie("token", user.id, {
-                httpOnly: true,
-                secure: true,
-                // Denna jäveln!!!!
-                sameSite: "none",
-                path: "/",
-                maxAge: 60 * 60 * 24, // Detta borde vara en dag ifall jag räknat rätt.
-            });
-            console.log("Setting cookie for user: ", user.id);
-            res.status(200).send({ sucess: true, id: user.id });
+            const token = jsonwebtoken_1.default.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: "1d" });
+            console.log("Genererade Token för user: ", user.id);
+            res.status(200).send({ success: true, token });
         }
     }
     catch (error) {
@@ -218,26 +205,17 @@ app.post("/api/login", (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 }));
 app.post("/api/logout", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // Logout
-    res.clearCookie("token");
+    // Client tar bort jwt tokenen.
     res.status(204).send({ message: "Logged out" });
 }));
 // Posts
-app.get("/api/posts", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.get("/api/posts", authToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Get Posts loggas");
+    const studentId = req.user.id;
     try {
-        const token = req.cookies.token;
-        const studentId = parseInt(token);
-        console.log("Student ID Innan", studentId);
-        if (isNaN(studentId)) {
-            res.status(401).send({ error: "Ingen/ogiltilg token" });
-        }
-        else {
-            console.log("Student ID Efter", studentId);
-            const result = yield client.query("SELECT posts.id, posts.text, posts.group_id, students.first_name, students.last_name FROM posts JOIN students ON posts.sender_id = students.id JOIN group_members ON posts.group_id = group_members.group_id WHERE group_members.student_id=$1", [studentId]);
-            console.log(result.rows);
-            res.status(200).send({ posts: result.rows });
-        }
+        const result = yield client.query("SELECT posts.id, posts.text, posts.group_id, students.first_name, students.last_name FROM posts JOIN students ON posts.sender_id = students.id JOIN group_members ON posts.group_id = group_members.group_id WHERE group_members.student_id=$1", [studentId]);
+        console.log(result.rows);
+        res.status(200).send({ posts: result.rows });
     }
     catch (error) {
         console.log("Couldnt get posts", error);
