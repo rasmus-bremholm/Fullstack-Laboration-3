@@ -7,13 +7,13 @@ import { useEffect, useState } from "react";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
-import type { weekday } from "../types/types";
+import type { schedule_event, weekday } from "../types/types";
 
 const url = "https://fullstack-laboration-3.onrender.com";
 
 export default function Shedule() {
 	const localizer = momentLocalizer(moment);
-	const [events, setEvents] = useState([]);
+	const [events, setEvents] = useState<schedule_event[]>([]);
 
 	const getDateForWeekdays = (weekday: string, time: string): Date => {
 		const days: Record<weekday, number> = {
@@ -46,14 +46,14 @@ export default function Shedule() {
 			if (!response.ok) {
 				console.log("Vi kunde inte fetcha");
 			} else {
-				const data = await response.json();
-				if (!data.schedule) {
+				const { schedule }: { schedule: schedule_event[] } = await response.json();
+				if (!schedule) {
 					console.error("Inget sschema från APIn");
 					return;
 				}
-				console.log(data.schedule);
+				console.log(schedule);
 				setEvents(
-					data.schedule.map((item) => ({
+					schedule.map((item) => ({
 						title: item.title,
 						start: getDateForWeekdays(item.weekday, item.start),
 						end: getDateForWeekdays(item.weekday, item.end),
@@ -66,6 +66,7 @@ export default function Shedule() {
 
 	return (
 		<div>
+			<h1>Ditt Veckoschema</h1>
 			<Calendar
 				defaultView='week'
 				views={["week"]}
@@ -75,6 +76,9 @@ export default function Shedule() {
 				startAccessor='start'
 				endAccessor='end'
 				style={{ height: 700 }}
+				// Sätter en begränsning. Jävla piss dokumentation.
+				min={new Date(1989, 1, 1, 8, 0)}
+				max={new Date(1989, 1, 1, 16, 45)}
 			/>
 		</div>
 	);

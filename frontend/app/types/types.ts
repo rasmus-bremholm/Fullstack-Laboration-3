@@ -7,11 +7,11 @@ export interface user {
 	profile_picture: string;
 }
 
-export interface shedule_event {
-	id: number;
-	date: Date;
-	start_time: number;
-	end_time: number;
+export interface schedule_event {
+	title: string;
+	weekday: weekday;
+	start: string;
+	end: string;
 }
 
 export interface group {
