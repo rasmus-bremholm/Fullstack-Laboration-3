@@ -39,3 +39,5 @@ export interface login_form_fields {
 	email: string;
 	password: string;
 }
+
+export type weekday = "Sunday" | "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday" | "Saturday";

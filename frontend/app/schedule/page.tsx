@@ -7,14 +7,16 @@ import { useEffect, useState } from "react";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
+import type { weekday } from "../types/types";
 
 const url = "https://fullstack-laboration-3.onrender.com";
 
 export default function Shedule() {
 	const localizer = momentLocalizer(moment);
+	const [events, setEvents] = useState([]);
 
 	const getDateForWeekdays = (weekday: string, time: string): Date => {
-		const days = {
+		const days: Record<weekday, number> = {
 			Sunday: 0,
 			Monday: 1,
 			Tuesday: 2,
@@ -26,20 +28,11 @@ export default function Shedule() {
 
 		const [hours, minutes] = time.split(":");
 		const now = new Date();
-		const base = new Date(now.setDate(now.getDate() - now.getDay() + days[weekday]));
+		const base = new Date(now.setDate(now.getDate() - now.getDay() + days[weekday as weekday]));
 		base.setHours(+hours, +minutes, 0, 0);
 
 		return new Date(base);
 	};
-
-	const events = [
-		{
-			title: "Programmering",
-			start: new Date(2025, 5, 21, 9, 0),
-			end: new Date(2025, 5, 21, 10, 0),
-			allDay: false,
-		},
-	];
 
 	useEffect(() => {
 		const token = localStorage.getItem("token");
@@ -49,8 +42,20 @@ export default function Shedule() {
 				headers: { Authorization: `Bearer ${token}` },
 			});
 
-			const { schedule } = await response.json();
-			console.log(schedule);
+			// Måste typa denna, urk.... Väntar på console loggen och ser därefter
+			if (!response.ok) {
+				console.log("Vi kunde inte fetcha");
+			} else {
+				const { schedule } = await response.json();
+				console.log(schedule);
+				setEvents(
+					schedule.map((item) => ({
+						title: item.title,
+						start: getDateForWeekdays(item.weekday, item.start),
+						end: getDateForWeekdays(item.weekday, item.end),
+					}))
+				);
+			}
 		}
 		fetchSchedule();
 	}, []);
