@@ -38,6 +38,7 @@ export default function Login() {
 
 		if (response.ok) {
 			console.log("Vi skapade ditt konto!");
+			setSignUp(false);
 		} else {
 			console.error("Vi kunde inte skapa kontot", response.status);
 		}
