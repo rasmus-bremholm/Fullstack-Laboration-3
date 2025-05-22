@@ -59,7 +59,7 @@ button {
 	justify-content: center;
 	align-items: center;
 	margin-left: auto;
-	padding: 0.25rem 2rem;
+	padding: 0.25rem 1rem;
 	transition: box-shadow 0.2s ease-in-out;
 	border: none;
 	border-radius: 25px;
@@ -69,6 +69,7 @@ button {
 
 	.material-symbols-outlined {
 		color: var(--background);
+		font-size: 20px;
 	}
 
 	&:hover {

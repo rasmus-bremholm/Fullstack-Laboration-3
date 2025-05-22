@@ -14,7 +14,7 @@ export default function Navbar() {
 				<Link href={"/"}>
 					<span className='material-symbols-outlined'>home</span>
 				</Link>
-				<Link href={"/"}>
+				<Link href={"/schedule"}>
 					<span className='material-symbols-outlined'>calendar_month</span>
 				</Link>
 			</div>

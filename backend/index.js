@@ -243,6 +243,34 @@ app.post("/api/posts", authToken, (req, res) => __awaiter(void 0, void 0, void 0
         }
     }
 }));
+// Schedule
+app.get("/api/schedule", authToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("Get Schedule loggas");
+    const studentId = req.user.id;
+    try {
+        const personalSchedule = yield client.query("SELECT weekday, start_time, end_time FROM weekly_schedule WHERE student_id=$1", [studentId]);
+        const groupEvents = yield client.query(`SELECT events.title, events.description, events.weekday, events.start_time, events.end_time
+	FROM events
+	JOIN group_members ON group_members.group_id = events.group_id
+	WHERE group_members.student_id=$1`, [studentId]);
+        const schedule = [
+            ...personalSchedule.rows.map((row) => ({
+                title: "Närvaro",
+                weekday: row.weekday,
+                start: row.start_time,
+                end: row.end_time,
+            })),
+            ...groupEvents.rows.map((row) => ({
+                title: row.title,
+                weekday: row.weekday,
+                start: row.start_time,
+                end: row.end_time,
+            })),
+        ];
+        res.status(200).send({ schedule });
+    }
+    catch (error) { }
+}));
 // Settingup server
 app.listen(port, () => {
     console.log("Server is running on http://localhost:" + port);

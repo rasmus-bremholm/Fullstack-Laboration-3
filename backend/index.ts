@@ -6,6 +6,8 @@ import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import { Client, QueryResult } from "pg";
 import jwt from "jsonwebtoken";
+import { title } from "process";
+import { start } from "repl";
 
 /*
 	TODO:
@@ -293,6 +295,41 @@ app.post("/api/posts", authToken, async (req: AuthRequest, res: Response) => {
 			}
 		}
 	}
+});
+
+// Schedule
+app.get("/api/schedule", authToken, async (req: AuthRequest, res: Response) => {
+	console.log("Get Schedule loggas");
+
+	const studentId = req.user!.id;
+
+	try {
+		const personalSchedule = await client.query("SELECT weekday, start_time, end_time FROM weekly_schedule WHERE student_id=$1", [studentId]);
+		const groupEvents = await client.query(
+			`SELECT events.title, events.description, events.weekday, events.start_time, events.end_time
+	FROM events
+	JOIN group_members ON group_members.group_id = events.group_id
+	WHERE group_members.student_id=$1`,
+			[studentId]
+		);
+
+		const schedule = [
+			...personalSchedule.rows.map((row) => ({
+				title: "Närvaro",
+				weekday: row.weekday,
+				start: row.start_time,
+				end: row.end_time,
+			})),
+			...groupEvents.rows.map((row) => ({
+				title: row.title,
+				weekday: row.weekday,
+				start: row.start_time,
+				end: row.end_time,
+			})),
+		];
+
+		res.status(200).send({ schedule });
+	} catch (error) {}
 });
 
 // Settingup server

@@ -85,7 +85,6 @@ export default function Home() {
 					<div className={styles.submitcontainer}>
 						<button type='submit' disabled={disabeledSubmit}>
 							<span className='material-symbols-outlined'>send</span>
-							Post
 						</button>
 						<select onChange={(event) => setSelectedGroup(Number(event.target.value))}>
 							<option value={""} disabled hidden>
