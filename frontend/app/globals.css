@@ -83,6 +83,11 @@ button {
 	grid-template-rows: auto 1fr;
 }
 
+.alert p {
+	color: var(--alert);
+	font-weight: 600;
+}
+
 main {
 	min-height: 100svh;
 	grid-column: 2;

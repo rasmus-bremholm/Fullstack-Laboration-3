@@ -117,7 +117,12 @@ app.get("/api/students/:id", (req, res) => __awaiter(void 0, void 0, void 0, fun
 }));
 app.post("/api/students", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield client.query("INSERT INTO students (first_name, last_name, email, password, profile_picture) VALUES ($1, $2, $3, $4, $5)", [req.body.first_name, req.body.last_name, req.body.email, req.body.password, req.body.profile_picture]);
+        const result = yield client.query("INSERT INTO students (first_name, last_name, email, password) VALUES ($1, $2, $3, $4, $5)", [
+            req.body.first_name,
+            req.body.last_name,
+            req.body.email,
+            req.body.password,
+        ]);
         if ((result === null || result === void 0 ? void 0 : result.rowCount) && result.rowCount > 0) {
             // Sucess
             res.status(201).send({ message: "Student created" });

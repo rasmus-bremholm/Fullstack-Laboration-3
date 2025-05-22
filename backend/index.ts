@@ -158,10 +158,12 @@ app.get("/api/students/:id", async (req, res) => {
 
 app.post("/api/students", async (req, res) => {
 	try {
-		const result: QueryResult = await client.query(
-			"INSERT INTO students (first_name, last_name, email, password, profile_picture) VALUES ($1, $2, $3, $4, $5)",
-			[req.body.first_name, req.body.last_name, req.body.email, req.body.password, req.body.profile_picture]
-		);
+		const result: QueryResult = await client.query("INSERT INTO students (first_name, last_name, email, password) VALUES ($1, $2, $3, $4, $5)", [
+			req.body.first_name,
+			req.body.last_name,
+			req.body.email,
+			req.body.password,
+		]);
 
 		if (result?.rowCount && result.rowCount > 0) {
 			// Sucess

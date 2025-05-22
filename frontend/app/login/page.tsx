@@ -12,6 +12,15 @@ export default function Login() {
 		email: "",
 		password: "",
 	});
+	const [userSignUpDetails, setuserSignUpDetails] = useState({
+		first_name: "",
+		last_name: "",
+		email: "",
+		password: "",
+		repeat_password: "",
+	});
+
+	const [passwordMatch, setPasswordMatch] = useState(false);
 
 	const handleSignUpSubmit = async (event: React.FormEvent) => {
 		event.preventDefault();
@@ -53,11 +62,14 @@ export default function Login() {
 	}
 
 	useEffect(() => {
-		if (userLoginDetails.email.length > 1 && userLoginDetails.password.length > 1) {
-			setSubmitDisabled(false);
-		} else {
-			setSubmitDisabled(true);
+		function validateInputs() {
+			if (userLoginDetails.email.length > 1 && userLoginDetails.password.length > 1) {
+				setSubmitDisabled(false);
+			} else {
+				setSubmitDisabled(true);
+			}
 		}
+		validateInputs();
 	}, [userLoginDetails]);
 
 	if (!signup) {
@@ -101,14 +113,36 @@ export default function Login() {
 					<h1>Skapa konto</h1>
 					<form onSubmit={handleSignUpSubmit}>
 						<div className={styles.inputcontainer}>
+							<label htmlFor='first_name'>First Name</label>
+							<input
+								id='first_name'
+								type='text'
+								name='first_name'
+								value={userSignUpDetails.email}
+								placeholder='FirstName'
+								onChange={(event) => setuserSignUpDetails({ ...userSignUpDetails, [event.target.name]: event.target.value })}
+							/>
+						</div>
+						<div className={styles.inputcontainer}>
+							<label htmlFor='last_name'>Last Name</label>
+							<input
+								id='last_name'
+								type='text'
+								name='last_name'
+								value={userSignUpDetails.email}
+								placeholder='LastName'
+								onChange={(event) => setuserSignUpDetails({ ...userSignUpDetails, [event.target.name]: event.target.value })}
+							/>
+						</div>
+						<div className={styles.inputcontainer}>
 							<label htmlFor='email'>Password</label>
 							<input
 								id='email'
 								type='email'
 								name='email'
-								value={userLoginDetails.email}
+								value={userSignUpDetails.email}
 								placeholder='you@email.com'
-								onChange={(event) => setUserLoginDetails({ ...userLoginDetails, [event.target.name]: event.target.value })}
+								onChange={(event) => setuserSignUpDetails({ ...userSignUpDetails, [event.target.name]: event.target.value })}
 							/>
 						</div>
 						<div className={styles.inputcontainer}>
@@ -117,10 +151,22 @@ export default function Login() {
 								id='password'
 								type='password'
 								name='password'
-								value={userLoginDetails.password}
+								value={userSignUpDetails.password}
 								placeholder='Password'
-								onChange={(event) => setUserLoginDetails({ ...userLoginDetails, [event.target.name]: event.target.value })}
+								onChange={(event) => setuserSignUpDetails({ ...userSignUpDetails, [event.target.name]: event.target.value })}
 							/>
+						</div>
+						<div className={styles.inputcontainer}>
+							<label htmlFor=''></label>
+							<input
+								id='repeat-password'
+								type='password'
+								name='repeat_password'
+								value={userSignUpDetails.repeat_password}
+								placeholder='Password Again'
+								onChange={(event) => setuserSignUpDetails({ ...userSignUpDetails, [event.target.name]: event.target.value })}
+							/>
+							{!passwordMatch && <p className='alert'>Passwords do not match!</p>}
 						</div>
 
 						<input type='submit' value='Sign Up' disabled={submitDisabeled} />
