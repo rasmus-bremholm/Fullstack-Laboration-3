@@ -33,7 +33,7 @@ export default function Posts(refetchTrigger: PostProps) {
 		fetchPosts();
 	}, [refetchTrigger]);
 
-	if (!posts) return <div>Logga in för att se dina poster....eller vänta på att backenden spinnar upp</div>;
+	if (!posts) return <div style={{ marginTop: "1.5rem" }}>Logga in för att se inläggen...</div>;
 
 	return (
 		<>
