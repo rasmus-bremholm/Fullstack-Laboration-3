@@ -1,6 +1,7 @@
 import styles from "../page.module.css";
 import Link from "next/link";
 import Image from "next/image";
+import LoginButton from "./LoginButton";
 
 export default function Navbar() {
 	const placeholderUser = {
@@ -20,6 +21,7 @@ export default function Navbar() {
 			</div>
 			<div className={styles.usercontent}>
 				<span className={`material-symbols-outlined ${styles.icons}`}>notifications</span>
+				<LoginButton />
 				<Link href={"/profile"}>
 					<Image className={styles.icons} src={placeholderUser.profile_picture} alt={`${placeholderUser.first_name} avatar`} width={20} height={20} />
 				</Link>

@@ -7,13 +7,13 @@ import { useEffect, useState } from "react";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
-import type { schedule_event, weekday } from "../types/types";
+import type { calendar_event, schedule_event, weekday } from "../types/types";
 
 const url = "https://fullstack-laboration-3.onrender.com";
 
 export default function Shedule() {
 	const localizer = momentLocalizer(moment);
-	const [events, setEvents] = useState<schedule_event[]>([]);
+	const [events, setEvents] = useState<calendar_event[]>([]);
 
 	const getDateForWeekdays = (weekday: string, time: string): Date => {
 		const days: Record<weekday, number> = {
@@ -53,7 +53,7 @@ export default function Shedule() {
 				}
 				console.log(schedule);
 				setEvents(
-					schedule.map((item) => ({
+					schedule.map((item: schedule_event) => ({
 						title: item.title,
 						start: getDateForWeekdays(item.weekday, item.start),
 						end: getDateForWeekdays(item.weekday, item.end),

@@ -7,11 +7,19 @@ export interface user {
 	profile_picture: string;
 }
 
+// Borde byta namn på dessa. Shedule Event är responsen vi får tillbaka
 export interface schedule_event {
 	title: string;
 	weekday: weekday;
 	start: string;
 	end: string;
+}
+
+// Medans calendar event är saken vi petar in i usestate.
+export interface calendar_event {
+	title: string;
+	start: Date;
+	end: Date;
 }
 
 export interface group {

@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { login_form_fields } from "../types/types";
 import { useRouter } from "next/navigation";
+import styles from "../styles/login.module.css";
 
 export default function Login() {
 	const [signup, setSignUp] = useState(false);
@@ -15,7 +16,17 @@ export default function Login() {
 	const handleSignUpSubmit = async (event: React.FormEvent) => {
 		event.preventDefault();
 
-		// rest of signup fetch
+		const response = await fetch("https://fullstack-laboration-3.onrender.com/api/students", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ first_name: "", last_name: "", email: "", password: "" }),
+		});
+
+		if (response.ok) {
+			console.log("Vi skapade ditt konto!");
+		} else {
+			console.error("Vi kunde inte skapa kontot", response.status);
+		}
 	};
 
 	const handleLoginSubmit = async (event: React.FormEvent) => {
@@ -51,48 +62,71 @@ export default function Login() {
 
 	if (!signup) {
 		return (
-			<div>
-				<form onSubmit={handleLoginSubmit}>
-					<input
-						type='email'
-						name='email'
-						value={userLoginDetails.email}
-						placeholder='you@email.com'
-						onChange={(event) => setUserLoginDetails({ ...userLoginDetails, [event.target.name]: event.target.value })}
-					/>
-					<input
-						type='password'
-						name='password'
-						value={userLoginDetails.password}
-						placeholder='Password'
-						onChange={(event) => setUserLoginDetails({ ...userLoginDetails, [event.target.name]: event.target.value })}
-					/>
-					<input type='submit' value='Login' disabled={submitDisabeled} />
-				</form>
-				<p onClick={swapSignInSignUp}>Registrera Användare?</p>
+			<div className={styles.loginwrapper}>
+				<div className={styles.logincontainer}>
+					<h1>Logga In</h1>
+					<form onSubmit={handleLoginSubmit}>
+						<div className={styles.inputcontainer}>
+							<label htmlFor='email'>Email</label>
+							<input
+								id='email'
+								type='email'
+								name='email'
+								value={userLoginDetails.email}
+								placeholder='you@email.com'
+								onChange={(event) => setUserLoginDetails({ ...userLoginDetails, [event.target.name]: event.target.value })}
+							/>
+						</div>
+						<div className={styles.inputcontainer}>
+							<label htmlFor='password'>Password</label>
+							<input
+								id='password'
+								type='password'
+								name='password'
+								value={userLoginDetails.password}
+								placeholder='Password'
+								onChange={(event) => setUserLoginDetails({ ...userLoginDetails, [event.target.name]: event.target.value })}
+							/>
+						</div>
+						<input type='submit' value='Login' disabled={submitDisabeled} />
+					</form>
+					<p onClick={swapSignInSignUp}>Har du inget konto? Registrera dig här!</p>
+				</div>
 			</div>
 		);
 	} else {
 		return (
-			<div>
-				<form onSubmit={handleSignUpSubmit}>
-					<input
-						type='email'
-						name='email'
-						value={userLoginDetails.email}
-						placeholder='you@email.com'
-						onChange={(event) => setUserLoginDetails({ ...userLoginDetails, [event.target.name]: event.target.value })}
-					/>
-					<input
-						type='password'
-						name='password'
-						value={userLoginDetails.password}
-						placeholder='Password'
-						onChange={(event) => setUserLoginDetails({ ...userLoginDetails, [event.target.name]: event.target.value })}
-					/>
-					<input type='submit' value='Sign Up' disabled={submitDisabeled} />
-				</form>
-				<p onClick={swapSignInSignUp}>Har du redan ett konto? Logga In</p>
+			<div className={styles.loginwrapper}>
+				<div className={styles.logincontainer}>
+					<h1>Skapa konto</h1>
+					<form onSubmit={handleSignUpSubmit}>
+						<div className={styles.inputcontainer}>
+							<label htmlFor='email'>Password</label>
+							<input
+								id='email'
+								type='email'
+								name='email'
+								value={userLoginDetails.email}
+								placeholder='you@email.com'
+								onChange={(event) => setUserLoginDetails({ ...userLoginDetails, [event.target.name]: event.target.value })}
+							/>
+						</div>
+						<div className={styles.inputcontainer}>
+							<label htmlFor='password'>Password</label>
+							<input
+								id='password'
+								type='password'
+								name='password'
+								value={userLoginDetails.password}
+								placeholder='Password'
+								onChange={(event) => setUserLoginDetails({ ...userLoginDetails, [event.target.name]: event.target.value })}
+							/>
+						</div>
+
+						<input type='submit' value='Sign Up' disabled={submitDisabeled} />
+					</form>
+					<p onClick={swapSignInSignUp}>Har du redan ett konto? Logga In</p>
+				</div>
 			</div>
 		);
 	}
