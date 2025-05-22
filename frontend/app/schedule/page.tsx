@@ -47,7 +47,7 @@ export default function Shedule() {
 				console.log("Vi kunde inte fetcha");
 			} else {
 				const data = await response.json();
-				if (data.schedule) {
+				if (!data.schedule) {
 					console.error("Inget sschema från APIn");
 					return;
 				}
