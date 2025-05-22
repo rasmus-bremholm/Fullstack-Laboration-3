@@ -28,7 +28,12 @@ export default function Login() {
 		const response = await fetch("https://fullstack-laboration-3.onrender.com/api/students", {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({ first_name: "", last_name: "", email: "", password: "" }),
+			body: JSON.stringify({
+				first_name: userSignUpDetails.first_name,
+				last_name: userSignUpDetails.last_name,
+				email: userSignUpDetails.email,
+				password: userSignUpDetails.password,
+			}),
 		});
 
 		if (response.ok) {
@@ -71,6 +76,26 @@ export default function Login() {
 		}
 		validateInputs();
 	}, [userLoginDetails]);
+
+	useEffect(() => {
+		function validateInputs() {
+			if (userSignUpDetails.first_name && userSignUpDetails.last_name && userSignUpDetails.email && userSignUpDetails.password) {
+				setSubmitDisabled(false);
+			} else {
+				setSubmitDisabled(true);
+			}
+		}
+		function validatePassword() {
+			// Asså ifall vi är fancy, så skulle vi kunna kolla ifall lösenordet uppfyller vissa krav med regex.
+			if (userSignUpDetails.password === userSignUpDetails.repeat_password) {
+				setPasswordMatch(true);
+			} else {
+				setPasswordMatch(false);
+			}
+		}
+		validateInputs();
+		validatePassword();
+	}, [userSignUpDetails]);
 
 	if (!signup) {
 		return (
