@@ -31,7 +31,7 @@ export default function LoginButton() {
 			logout
 		</span>
 	) : (
-		<Link href={"/login"}>
+		<Link href={"/Login"}>
 			<span className={`material-symbols-outlined ${styles.icons}`}>login</span>
 		</Link>
 	);
