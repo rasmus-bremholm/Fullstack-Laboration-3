@@ -263,7 +263,7 @@ app.get("/api/posts", authToken, async (req: AuthRequest, res: Response) => {
 	const studentId = req.user!.id;
 	try {
 		const result = await client.query(
-			"SELECT posts.id, posts.text, posts.group_id, students.first_name, students.last_name FROM posts JOIN students ON posts.sender_id = students.id JOIN group_members ON posts.group_id = group_members.group_id WHERE group_members.student_id=$1 ORDER BY posts.id DESC",
+			"SELECT posts.id, posts.text, posts.group_id, students.first_name, students.last_name, students.profile_picture FROM posts JOIN students ON posts.sender_id = students.id JOIN group_members ON posts.group_id = group_members.group_id WHERE group_members.student_id=$1 ORDER BY posts.id DESC",
 			[studentId]
 		);
 		//console.log(result.rows);
