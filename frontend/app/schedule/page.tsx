@@ -37,7 +37,7 @@ export default function Shedule() {
 	useEffect(() => {
 		const token = localStorage.getItem("token");
 		async function fetchSchedule() {
-			const response = await fetch(`${url}/api/posts`, {
+			const response = await fetch(`${url}/api/schedule`, {
 				method: "GET",
 				headers: { Authorization: `Bearer ${token}` },
 			});
@@ -46,10 +46,14 @@ export default function Shedule() {
 			if (!response.ok) {
 				console.log("Vi kunde inte fetcha");
 			} else {
-				const { schedule } = await response.json();
-				console.log(schedule);
+				const data = await response.json();
+				if (data.schedule) {
+					console.error("Inget sschema från APIn");
+					return;
+				}
+				console.log(data.schedule);
 				setEvents(
-					schedule.map((item) => ({
+					data.schedule.map((item) => ({
 						title: item.title,
 						start: getDateForWeekdays(item.weekday, item.start),
 						end: getDateForWeekdays(item.weekday, item.end),
