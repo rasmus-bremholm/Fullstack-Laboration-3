@@ -26,14 +26,18 @@
 	cursor: pointer;
 	font-variation-settings: "FILL" 0, "wght" 200, "GRAD" 200, "opsz" 24;
 	font-size: 20px;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
 	width: 2.5rem;
 	height: 2.5rem;
 	border-radius: 50%;
 	background-color: var(--background);
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	vertical-align: middle;
+	line-height: 1;
+	font-family: "Material Symbols Outlined";
 
+	transition: all 0.2s ease;
 	&:hover {
 		background-color: var(--accent);
 		color: var(--panel-color);
