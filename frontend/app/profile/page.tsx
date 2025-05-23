@@ -5,15 +5,16 @@
 import styles from "../styles/profile.module.css";
 import type { user } from "../types/types";
 import { useState, useEffect } from "react";
+import Image from "next/image";
 
 export default function Profile() {
-	const [user, setUser] = useState<user>({
+	const [user, setUser] = useState({
 		id: 0,
 		first_name: "",
 		last_name: "",
 		email: "",
 		password: "",
-		profile_picture: "",
+		profile_picture: null,
 	});
 
 	useEffect(() => {
@@ -24,17 +25,22 @@ export default function Profile() {
 				method: "GET",
 				headers: { Authorization: `Bearer ${token}` },
 			});
-			const data: user = await response.json();
+			const data = await response.json();
+
 			if (response.ok) {
-				setUser(data);
+				setUser(data.student);
 			}
+			//console.log(data.student);
 		}
 		getUserDetails();
 	}, []);
 
 	return (
 		<div className={styles.profilecontainer}>
-			<div className={styles.avatarcontainer}>{user.first_name}</div>
+			<div className={styles.avatarcontainer}>
+				{user.profile_picture && <Image src={user.profile_picture} width={150} height={150} alt={user.first_name + "profile picture"} />}
+				{user.first_name}
+			</div>
 			<div className={styles.infocontainer}>info</div>
 			<div className={styles.groupcontainer}>groups</div>
 			<div className={styles.eventscontainer}>event</div>
