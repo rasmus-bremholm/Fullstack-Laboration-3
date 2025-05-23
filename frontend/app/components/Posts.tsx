@@ -35,7 +35,7 @@ export default function Posts(refetchTrigger: PostProps) {
 				headers: { Authorization: `Bearer ${token}` },
 			});
 			const { posts } = (await response.json()) as postsResponse;
-			console.log(posts);
+			//console.log(posts);
 			setPosts(posts);
 		}
 		fetchPosts();
