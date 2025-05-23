@@ -263,11 +263,23 @@ app.get("/api/posts", authToken, async (req: AuthRequest, res: Response) => {
 	const studentId = req.user!.id;
 	try {
 		const result = await client.query(
-			"SELECT posts.id, posts.text, posts.group_id, students.first_name, students.last_name, students.profile_picture FROM posts JOIN students ON posts.sender_id = students.id JOIN group_members ON posts.group_id = group_members.group_id WHERE group_members.student_id=$1 ORDER BY posts.id DESC",
+			`SELECT
+		posts.id,
+		posts.text,
+		posts.group_id,
+		posts.created_at,
+		groups.name AS group_name,
+		students.first_name,
+		students.last_name,
+		students.profile_picture
+		FROM posts
+		JOIN students ON posts.sender_id = students.id
+		JOIN group_members ON posts.group_id = group_members.group_id
+		JOIN groups ON posts.group_id = groups.id
+		WHERE group_members.student_id = $1
+		ORDER BY posts.created_at DESC`,
 			[studentId]
 		);
-		//const groups = await client.query("SELECT ")
-		//console.log(result.rows);
 
 		res.status(200).send({ posts: result.rows });
 	} catch (error: unknown) {

@@ -35,6 +35,7 @@ export interface post {
 	last_name: string;
 	group_id: number;
 	comments: comment;
+	created_at: string;
 }
 
 export interface comment {
