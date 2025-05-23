@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Head from "next/head";
 
 import Navbar from "./components/Navbar";
 import { AuthProvider } from "./utils/authcontext";
@@ -23,6 +24,9 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang='en'>
+			<Head>
+				<link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=optional' />
+			</Head>
 			<body className={`${inter.variable}`}>
 				<AuthProvider>
 					<div className='grid-container'>
