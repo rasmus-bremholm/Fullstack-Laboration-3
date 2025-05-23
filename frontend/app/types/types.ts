@@ -36,6 +36,7 @@ export interface post {
 	group_id: number;
 	comments: comment;
 	created_at: string;
+	profile_picture: string;
 }
 
 export interface comment {

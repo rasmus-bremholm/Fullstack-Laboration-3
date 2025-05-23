@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function LoginButton() {
-	const { isLoggedIn } = useAuth();
+	const { isLoggedIn, logout } = useAuth();
 	const router = useRouter();
 	// Måste göra detta för att hydration inte funkar...suck.
 	const [hasMounted, setHasMounted] = useState(false);
@@ -17,7 +17,7 @@ export default function LoginButton() {
 
 	const logoutUser = () => {
 		if (isLoggedIn) {
-			localStorage.removeItem("token");
+			logout();
 			router.push("/");
 		} else {
 			console.log("Hur kom du ens hit? Vi kan inte logga ut dig?");

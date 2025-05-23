@@ -3,6 +3,7 @@
 import { post } from "../types/types";
 import styles from "../styles/posts.module.css";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 // const url = process.env.BACKEND_URL;
 const url = "https://fullstack-laboration-3.onrender.com";
@@ -18,6 +19,13 @@ interface PostProps {
 
 export default function Posts(refetchTrigger: PostProps) {
 	const [posts, setPosts] = useState<post[]>([]);
+
+	const dateFormatter = (time: string) => {
+		return new Date(time).toLocaleString("sv-SE", {
+			dateStyle: "short",
+			timeStyle: "short",
+		});
+	};
 
 	useEffect(() => {
 		const token = localStorage.getItem("token");
@@ -40,7 +48,9 @@ export default function Posts(refetchTrigger: PostProps) {
 			{posts.map((post: post) => (
 				<article className={styles.post} key={post.id}>
 					<div className={styles.postheader}>
+						<Image src={post.profile_picture} alt={post.first_name + "avatar"} width={18} height={18} />
 						{post.first_name} {post.last_name}
+						<p className={styles.timestamp}>{dateFormatter(post.created_at)}</p>
 						<span className={`material-symbols-outlined ${styles.icon}`}>more_horiz</span>
 					</div>
 					<div className={styles.postcontent}>{post.text}</div>

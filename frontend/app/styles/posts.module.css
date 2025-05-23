@@ -12,14 +12,21 @@
 .postheader {
 	grid-column: span 2;
 	display: flex;
-	justify-content: space-between;
-	align-items: center;
+	justify-content: flex-start;
+	align-items: flex-start;
+	gap: 1rem;
 	text-transform: capitalize;
 	font-weight: 700;
 	padding-bottom: 0.5rem;
 }
+.timestamp {
+	margin-left: auto;
+	font-weight: 500;
+	font-size: 0.6rem;
+}
 
 .icon {
+	margin-left: auto;
 	font-size: 20px;
 	cursor: pointer;
 }

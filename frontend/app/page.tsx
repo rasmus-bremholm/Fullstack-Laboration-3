@@ -29,20 +29,22 @@ export default function Home() {
 
 	useEffect(() => {
 		const token = localStorage.getItem("token");
-		async function GetGroups() {
-			const response = await fetch("https://fullstack-laboration-3.onrender.com/api/groups", {
-				method: "GET",
-				headers: { Authorization: `Bearer ${token}` },
-			});
+		if (token) {
+			async function GetGroups() {
+				const response = await fetch("https://fullstack-laboration-3.onrender.com/api/groups", {
+					method: "GET",
+					headers: { Authorization: `Bearer ${token}` },
+				});
 
-			if (response.ok) {
-				const data = await response.json();
-				setGroups(data.groups);
-			} else {
-				console.error("Frontenden kunde inte ta emot grupperna");
+				if (response.ok) {
+					const data = await response.json();
+					setGroups(data.groups);
+				} else {
+					console.error("Frontenden kunde inte ta emot grupperna");
+				}
 			}
+			GetGroups();
 		}
-		GetGroups();
 	}, []);
 
 	const handleSubmit = async (event: React.FormEvent) => {

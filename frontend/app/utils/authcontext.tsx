@@ -6,11 +6,13 @@ import { user } from "../types/types";
 interface ContextType {
 	isLoggedIn: boolean;
 	userId: number | null;
+	logout: () => void;
 }
 
 const AuthContext = createContext<ContextType>({
 	isLoggedIn: false,
 	userId: null,
+	logout: () => {},
 });
 
 export function useAuth() {
@@ -22,6 +24,12 @@ export function useAuth() {
 export function AuthProvider({ children }: { children: React.ReactNode }) {
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const [userId, setUserID] = useState<number | null>(null);
+
+	const logout = () => {
+		localStorage.removeItem("token");
+		setIsLoggedIn(false);
+		setUserID(null);
+	};
 
 	// När Auth providern körs, så körs automagiskt denna funktionen som en vanlig useEffect, najs!
 	useEffect(() => {
@@ -40,5 +48,5 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 		checkAuth();
 	}, []);
 
-	return <AuthContext.Provider value={{ isLoggedIn, userId }}>{children}</AuthContext.Provider>;
+	return <AuthContext.Provider value={{ isLoggedIn, userId, logout }}>{children}</AuthContext.Provider>;
 }
