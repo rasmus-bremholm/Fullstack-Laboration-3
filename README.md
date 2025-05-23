@@ -12,15 +12,11 @@ For the third lab in my fullstack development course i wanted to focus on a coup
 -   Third, I wanted to make something that would have real life benefits, and the idea of the usecase for this app is a student portal
     for my old workplace.
 
----
-
 ## Requirements
 
 In the course we have varius limitations that dictate how the app could be built. Main problems with my choise of techstack is that
 the backend had to be written in express and using a postgre database. And for extra credits in the course the app had to be deployed
 on the web. Something that atfirst didn't worry me, but became a huge headache down the line.
-
----
 
 ## Documentation
 
@@ -38,11 +34,23 @@ Database structure and avalible fields. Updates Continously
 -   [ ] [Move the backend to NextJS](#move-backend)
 -   [ ] [Concider Supabase as an alternative Database](#supabase-db)
 -   [ ] [Concider Supabase Auth, moving away from JWT](#supabase-auth)
+-   [ ] [Adjust all fetching to be done server side](#ssr)
+
+## Changelog
+
+Nothing to see here yet.
+
+## Post Mortem
 
 #### Finish Documentation
+
+I'll aim to finish a version 0.1 of this documentation before i turn the project in, but the README has to be updated continously
+with new updates done to the backend and DB. As for now I will treat this as a postmortem, before i continue on working on version 1.0.
 
 #### Move Backend
 
 #### Supabase DB
 
 #### Supabase Auth
+
+#### SSR
