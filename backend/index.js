@@ -89,8 +89,8 @@ app.get("/api/user", authToken, (req, res) => __awaiter(void 0, void 0, void 0, 
         const schedule = yield client.query("SELECT weekday, start_time, end_time FROM weekly_schedule WHERE student_id=$1", [studentId]);
         const groups = yield client.query("SELECT groups.id, groups.name, groups.description FROM group_members JOIN groups ON groups.id = group_members.group_id WHERE group_members.student_id=$1", [studentId]);
         const events = yield client.query("SELECT events.* FROM events JOIN group_members ON events.group_id = group_members.group_id WHERE group_members.student_id=$1", [studentId]);
+        console.log(events);
         res.status(200).send({ student: student.rows[0], schedule: schedule.rows, groups: groups.rows, events: events.rows });
-        //console.log(student, schedule, groups, events);
     }
     catch (error) {
         res.status(500).send({ error: "Something went wrong, stupid" });
@@ -183,8 +183,6 @@ app.get("/api/groups", authToken, (req, res) => __awaiter(void 0, void 0, void 0
         res.status(500).send({ error: "Failed to get groups" });
     }
 }));
-// Login
-// Have to go to a JWT based sollution
 app.post("/api/login", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Login info sent to server: ", req.body);
     try {

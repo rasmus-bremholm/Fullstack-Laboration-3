@@ -1,6 +1,6 @@
 "use client";
 
-import { post } from "../types/types";
+import { Post } from "../types/types";
 import styles from "../styles/posts.module.css";
 import { useEffect, useState } from "react";
 import Image from "next/image";
@@ -10,7 +10,7 @@ const url = "https://fullstack-laboration-3.onrender.com";
 // https://fullstack-laboration-3.onrender.com
 
 interface postsResponse {
-	posts: post[];
+	posts: Post[];
 }
 
 interface PostProps {
@@ -18,7 +18,7 @@ interface PostProps {
 }
 
 export default function Posts(refetchTrigger: PostProps) {
-	const [posts, setPosts] = useState<post[]>([]);
+	const [posts, setPosts] = useState<Post[]>([]);
 
 	const dateFormatter = (time: string) => {
 		return new Date(time).toLocaleString("sv-SE", {
@@ -45,7 +45,7 @@ export default function Posts(refetchTrigger: PostProps) {
 
 	return (
 		<>
-			{posts.map((post: post) => (
+			{posts.map((post: Post) => (
 				<article className={styles.post} key={post.id}>
 					<div className={styles.postheader}>
 						<Image src={post.profile_picture} alt={post.first_name + "avatar"} width={18} height={18} />

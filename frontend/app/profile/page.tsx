@@ -3,12 +3,12 @@
 "use client";
 
 import styles from "../styles/profile.module.css";
-import type { user } from "../types/types";
+import type { User } from "../types/types";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 
 export default function Profile() {
-	const [user, setUser] = useState<user>({
+	const [user, setUser] = useState<User>({
 		id: 0,
 		first_name: "",
 		last_name: "",

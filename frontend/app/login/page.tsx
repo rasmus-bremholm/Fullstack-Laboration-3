@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { login_form_fields } from "../types/types";
+import { Login_Form_Fields } from "../types/types";
 import { useRouter } from "next/navigation";
 import styles from "../styles/login.module.css";
 
@@ -8,7 +8,7 @@ export default function Login() {
 	const [signup, setSignUp] = useState(false);
 	const router = useRouter();
 	const [submitDisabeled, setSubmitDisabled] = useState(true);
-	const [userLoginDetails, setUserLoginDetails] = useState<login_form_fields>({
+	const [userLoginDetails, setUserLoginDetails] = useState<Login_Form_Fields>({
 		email: "",
 		password: "",
 	});

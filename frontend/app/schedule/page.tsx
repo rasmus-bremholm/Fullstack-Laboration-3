@@ -7,16 +7,16 @@ import { useEffect, useState } from "react";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
-import type { calendar_event, schedule_event, weekday } from "../types/types";
+import type { Calendar_Event, Schedule_Event, Weekday } from "../types/types";
 
 const url = "https://fullstack-laboration-3.onrender.com";
 
 export default function Shedule() {
 	const localizer = momentLocalizer(moment);
-	const [events, setEvents] = useState<calendar_event[]>([]);
+	const [events, setEvents] = useState<Calendar_Event[]>([]);
 
 	const getDateForWeekdays = (weekday: string, time: string): Date => {
-		const days: Record<weekday, number> = {
+		const days: Record<Weekday, number> = {
 			Sunday: 0,
 			Monday: 1,
 			Tuesday: 2,
@@ -28,7 +28,7 @@ export default function Shedule() {
 
 		const [hours, minutes] = time.split(":");
 		const now = new Date();
-		const base = new Date(now.setDate(now.getDate() - now.getDay() + days[weekday as weekday]));
+		const base = new Date(now.setDate(now.getDate() - now.getDay() + days[weekday as Weekday]));
 		base.setHours(+hours, +minutes, 0, 0);
 
 		return new Date(base);
@@ -46,14 +46,14 @@ export default function Shedule() {
 			if (!response.ok) {
 				console.log("Vi kunde inte fetcha");
 			} else {
-				const { schedule }: { schedule: schedule_event[] } = await response.json();
+				const { schedule }: { schedule: Schedule_Event[] } = await response.json();
 				if (!schedule) {
 					console.error("Inget sschema från APIn");
 					return;
 				}
 				console.log(schedule);
 				setEvents(
-					schedule.map((item: schedule_event) => ({
+					schedule.map((item: Schedule_Event) => ({
 						title: item.title,
 						start: getDateForWeekdays(item.weekday, item.start),
 						end: getDateForWeekdays(item.weekday, item.end),

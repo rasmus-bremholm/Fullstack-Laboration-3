@@ -5,11 +5,11 @@ import Image from "next/image";
 import { Divider } from "@mui/material";
 import { useEffect, useState } from "react";
 import Posts from "./components/Posts";
-import { group } from "./types/types";
+import { Group } from "./types/types";
 
 export default function Home() {
 	const [postText, setPostText] = useState("");
-	const [groups, setGroups] = useState<group[] | []>([]);
+	const [groups, setGroups] = useState<Group[] | []>([]);
 	const [selectedGroup, setSelectedGroup] = useState(1);
 	const [isFocused, setIsFocused] = useState(false);
 	const [disabeledSubmit, setDisabledSubmit] = useState(true);

@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { user } from "../types/types";
+import { User } from "../types/types";
 
 interface ContextType {
 	isLoggedIn: boolean;
@@ -40,7 +40,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 			});
 
 			if (respons.ok) {
-				const data: user = await respons.json();
+				const data: User = await respons.json();
 				setIsLoggedIn(true);
 				setUserID(data.id);
 			}

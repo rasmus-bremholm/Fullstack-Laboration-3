@@ -73,6 +73,10 @@ interface LoginFormData {
 	password: string;
 }
 
+interface Schedule_Event {
+	// In /api/user assign this type to the Events database call.
+}
+
 interface AuthRequest extends Request {
 	user?: { id: number; email: string };
 }
@@ -125,8 +129,8 @@ app.get("/api/user", authToken, async (req: AuthRequest, res: Response) => {
 			"SELECT events.* FROM events JOIN group_members ON events.group_id = group_members.group_id WHERE group_members.student_id=$1",
 			[studentId]
 		);
+		console.log(events);
 		res.status(200).send({ student: student.rows[0], schedule: schedule.rows, groups: groups.rows, events: events.rows });
-		//console.log(student, schedule, groups, events);
 	} catch (error) {
 		res.status(500).send({ error: "Something went wrong, stupid" }) as Response;
 	}
@@ -227,7 +231,6 @@ app.get("/api/groups", authToken, async (req: AuthRequest, res: Response) => {
 		res.status(500).send({ error: "Failed to get groups" });
 	}
 });
-
 
 app.post("/api/login", async (req, res) => {
 	console.log("Login info sent to server: ", req.body);

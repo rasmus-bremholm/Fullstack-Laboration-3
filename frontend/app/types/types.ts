@@ -1,4 +1,4 @@
-export interface user {
+export interface User {
 	id: number;
 	first_name: string;
 	last_name: string;
@@ -8,46 +8,46 @@ export interface user {
 }
 
 // Borde byta namn på dessa. Shedule Event är responsen vi får tillbaka
-export interface schedule_event {
+export interface Schedule_Event {
 	title: string;
-	weekday: weekday;
+	weekday: Weekday;
 	start: string;
 	end: string;
 }
 
 // Medans calendar event är saken vi petar in i usestate.
-export interface calendar_event {
+export interface Calendar_Event {
 	title: string;
 	start: Date;
 	end: Date;
 }
 
-export interface group {
+export interface Group {
 	id: number;
 	name: string;
 	description: string;
 }
 
-export interface post {
+export interface Post {
 	id: number;
 	text: string;
 	first_name: string;
 	last_name: string;
 	group_id: number;
-	comments: comment;
+	comments: Comment;
 	created_at: string;
 	profile_picture: string;
 }
 
-export interface comment {
+export interface Comment {
 	id: number;
 	text: string;
 	sender: number;
 }
 
-export interface login_form_fields {
+export interface Login_Form_Fields {
 	email: string;
 	password: string;
 }
 
-export type weekday = "Sunday" | "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday" | "Saturday";
+export type Weekday = "Sunday" | "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday" | "Saturday";
