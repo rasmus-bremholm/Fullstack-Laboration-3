@@ -2,6 +2,17 @@
 
 Länk till deployment: [Deployment](https://fullstack-laboration-3.vercel.app/)
 
+## Table of Contents
+
+-   [Introduction](#introduction)
+-   [Requirements](#requirements)
+-   [Documentation](#documentation)
+    -   [API](#api)
+    -   [Database Structure](#database-structure)
+-   [Todo List](#todo)
+-   [Changelog](#changelog)
+-   [Post Mortem](#post-mortem)
+
 ## Introduction
 
 For the third lab in my fullstack development course i wanted to focus on a couple of key areas.
@@ -30,6 +41,16 @@ Database structure and avalible fields. Updates Continously
 
 ## Todo
 
+### Pre Handin
+
+-   [x] Profile Page
+-   [ ] Edit Groups
+-   [ ] Edit Profile Picture
+-   [ ] Edit Name/Email
+-   [ ] Add/Remove Events
+
+### Post Handin
+
 -   [ ] [Finish writing this documentation](#finish-documentation)
 -   [ ] [Move the backend to NextJS](#move-backend)
 -   [ ] [Concider Supabase as an alternative Database](#supabase-db)
@@ -46,10 +67,18 @@ Nothing to see here yet.
 
 I'll aim to finish a version 0.1 of this documentation before i turn the project in, but the README has to be updated continously
 with new updates done to the backend and DB. As for now I will treat this as a postmortem, before i continue on working on version 1.0.
+Woring on the README will take place when I have time over from acctual implementation of features.
 
 #### Move Backend
 
+First thing ill do is to look to move the backend from Renders Express to the Nextjs App, i knew the separate backend wouldnt play nice with
+Nextjs from the get go and Id have to make strange workarounds but as it was a requirement for the assignment i made the compromise. Having the backend on the server enables me
+to add moore elegant form-handeling and API routes. Ill also look into the conventional logic of fetching on the server.
+
 #### Supabase DB
+
+I probably want to use the Supabase PostgreSQL database going forward. Nothing wrong with the Render once, but price wise it makes sense to go Supabase.
+Since I also ant to head in the Supabase direction for auth its 2 birds 1 stone.
 
 #### Supabase Auth
 
