@@ -109,27 +109,31 @@ Nothing to see here yet.
 
 ## Post Mortem
 
+Here I will take notes on what went wrong and what went right.
+
+---
+
 #### Finish Documentation
 
 I'll aim to finish a version 0.1 of this documentation before i turn the project in, but the README has to be updated continously
-with new updates done to the backend and DB. As for now I will treat this as a postmortem, before i continue on working on version 1.0.
-Woring on the README will take place when I have time over from acctual implementation of features.
+with new updates done to the backend and DB as the project finishes. The documentation will be moore extencive once the project is finished and i'm no longer adding more features.
+So right now, working on the README will take place when I have time over from acctual implementation of features.
 
 #### Move Backend
 
-First thing ill do is to look to move the backend from Renders Express to the Nextjs App, i knew the separate backend wouldnt play nice with
+First thing i'll do is to look to move the backend from Renders Express to the Nextjs App, i knew the separate backend wouldnt play nice with
 Nextjs from the get go and Id have to make strange workarounds but as it was a requirement for the assignment i made the compromise. Having the backend on the server enables me
-to add moore elegant form-handeling and API routes. Ill also look into the conventional logic of fetching on the server.
+to add moore elegant form-handeling and API routes. I'll also look into the conventional logic of fetching on the server.
 
 #### Supabase DB
 
-I probably want to use the Supabase PostgreSQL database going forward. Nothing wrong with the Render once, but price wise it makes sense to go Supabase.
+I probably want to use the Supabase PostgreSQL database going forward. Nothing wrong with the one currently deployed on Render, but price wise it makes sense to go Supabase.
 Since I also ant to head in the Supabase direction for auth its 2 birds 1 stone.
 
 #### Supabase Auth
 
 JWT Tokens where a good pick for this assignment, it let me do what I wanted for the time beeing. But every time we need to check if user is authed or get access to the user
-we have to do it client side, something witch i want to avoid. In the future I want the client to be dumb and server to be the authorative voice passing down data to client components.
+we have to do it client side, something witch i want to avoid going forward. In the future I want the client to be dumb and server to be the authorative voice passing down data to client components.
 This pairs well with Supabase auth, but alot more reseach is required to see if this fits with my project. Well if im already paying for the Supabase DB i might aswell try the supabase auth.
 
 #### SSR
