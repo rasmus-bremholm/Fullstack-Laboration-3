@@ -65,8 +65,8 @@ This returns the entire user object wich is structured like so:
         id: number,
         name: string,
         description: string
-    }
-    ]
+    },
+    ],
     events: [
         {
            id: number,
