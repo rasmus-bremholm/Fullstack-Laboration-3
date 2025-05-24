@@ -228,8 +228,6 @@ app.get("/api/groups", authToken, async (req: AuthRequest, res: Response) => {
 	}
 });
 
-// Login
-// Have to go to a JWT based sollution
 
 app.post("/api/login", async (req, res) => {
 	console.log("Login info sent to server: ", req.body);

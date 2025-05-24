@@ -4,7 +4,7 @@ export interface user {
 	last_name: string;
 	email: string;
 	password: string;
-	profile_picture: string;
+	profile_picture: string | null;
 }
 
 // Borde byta namn på dessa. Shedule Event är responsen vi får tillbaka
