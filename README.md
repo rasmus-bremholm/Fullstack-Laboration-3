@@ -35,6 +35,52 @@ on the web. Something that atfirst didn't worry me, but became a huge headache d
 
 Following this is a documentation of the different API routes and the data that gets returned. Updates Continously
 
+#### Get Student
+
+Gets the current logged in user. JWT token has to be passed to the request.headers.authorization field.
+
+```
+/api/user
+```
+
+This returns the entire user object wich is structured like so:
+
+```javascript
+{
+    student: {
+        id: number,
+        first_name: string,
+        last_name: string,
+        email: string,
+        password: string,
+        profile_picture: string
+    },
+    schedule: {
+        weekday: string,
+        start_time: string,
+        end_time: string
+    },
+    groups: [
+        {
+        id: number,
+        name: string,
+        description: string
+    }
+    ]
+    events: [
+        {
+           id: number,
+           group_id: number,
+           title: string,
+           description: string,
+           weekday: string, (Allowed "Monday", "Tuesday", "Wednesday", "Thursday" , "Friday")
+           start_time: string, (Time without timezone hh:mm:ss)
+           end_time: string, (Time without timezone hh:mm:ss)
+        }
+    ]
+}
+```
+
 ### Database Structure
 
 Database structure and avalible fields. Updates Continously
@@ -82,4 +128,11 @@ Since I also ant to head in the Supabase direction for auth its 2 birds 1 stone.
 
 #### Supabase Auth
 
+JWT Tokens where a good pick for this assignment, it let me do what I wanted for the time beeing. But every time we need to check if user is authed or get access to the user
+we have to do it client side, something witch i want to avoid. In the future I want the client to be dumb and server to be the authorative voice passing down data to client components.
+This pairs well with Supabase auth, but alot more reseach is required to see if this fits with my project. Well if im already paying for the Supabase DB i might aswell try the supabase auth.
+
 #### SSR
+
+The largest failiure of my project is that almost everything in the frontend is client side rendered. This needs to change. I want to move as much as I can into server-side rendered components.
+Especially server actions for all of my forms. This "should" be easier if I move the backend to NextJS.
