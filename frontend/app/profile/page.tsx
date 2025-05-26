@@ -7,6 +7,8 @@ import type { User } from "../types/types";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { EditIcon, DeleteStudent } from "../icons/icons";
+import { EditModal, DeleteModal } from "../components/Modals";
+import { Divider } from "@mui/material";
 
 export default function Profile() {
 	const [editModal, setEditModal] = useState(false);
@@ -38,14 +40,6 @@ export default function Profile() {
 		getUserDetails();
 	}, []);
 
-	const EditModalToggle = () => {
-		setEditModal(!editModal);
-	};
-
-	const DeleteModalToggle = () => {
-		setDeleteModal(!deleteModal);
-	};
-
 	return (
 		<div className={styles.profilecontainer}>
 			<div className={styles.avatarcontainer}>
@@ -62,11 +56,42 @@ export default function Profile() {
 					</p>
 				</div>
 				<div className={styles.container}>
-					<EditIcon onClick={EditModalToggle} />
-					<DeleteStudent onClick={DeleteModalToggle} />
+					<EditIcon onClick={() => setEditModal(true)} />
+					<DeleteStudent onClick={() => setDeleteModal(true)} />
 				</div>
 			</div>
-			<div className={styles.infocontainer}>info</div>
+			<EditModal isOpen={editModal} onClose={() => setEditModal(false)} />
+			<DeleteModal isOpen={deleteModal} onClose={() => setDeleteModal(false)} />
+			<div className={styles.infocontainer}>
+				<div className={styles.infofield}>
+					<p>Full Name: </p>
+					<p>
+						{user.first_name}
+						{user.last_name}
+					</p>
+				</div>
+				<Divider />
+				<div className={styles.infofield}>
+					<p>Email: </p>
+					<p>{user.email}</p>
+				</div>
+				<Divider />
+				<div className={styles.infofield}>
+					<p>Password: </p>
+					<p>{"*".repeat(user.password.length)}</p>
+				</div>
+				<Divider />
+				<div className={styles.infofield}>
+					<p>Phone Number: </p>
+					<p>N/A</p>
+				</div>
+				<Divider />
+				<div className={styles.infofield}>
+					<p>Adress: </p>
+					<p>N/A</p>
+				</div>
+				<Divider />
+			</div>
 			<div className={styles.groupcontainer}>groups</div>
 			<div className={styles.eventscontainer}>event</div>
 		</div>
