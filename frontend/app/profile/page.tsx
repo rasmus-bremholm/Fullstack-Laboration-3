@@ -6,8 +6,11 @@ import styles from "../styles/profile.module.css";
 import type { User } from "../types/types";
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import { EditIcon, DeleteStudent } from "../icons/icons";
 
 export default function Profile() {
+	const [editModal, setEditModal] = useState(false);
+	const [deleteModal, setDeleteModal] = useState(false);
 	const [user, setUser] = useState<User>({
 		id: 0,
 		first_name: "",
@@ -35,11 +38,33 @@ export default function Profile() {
 		getUserDetails();
 	}, []);
 
+	const EditModalToggle = () => {
+		setEditModal(!editModal);
+	};
+
+	const DeleteModalToggle = () => {
+		setDeleteModal(!deleteModal);
+	};
+
 	return (
 		<div className={styles.profilecontainer}>
 			<div className={styles.avatarcontainer}>
 				{user.profile_picture && <Image src={user.profile_picture} width={150} height={150} alt={user.first_name + "profile picture"} />}
-				{user.first_name} {user.last_name}
+				<div>
+					<h2>
+						{user.first_name} {user.last_name}
+					</h2>
+				</div>
+				<div className={styles.container}>
+					<p>
+						Lorem ipsum dolor sit amet consectetur, adipisicing elit. Soluta sequi adipisci ipsum iste odit doloribus consequatur voluptatibus id
+						explicabo! Facilis!
+					</p>
+				</div>
+				<div className={styles.container}>
+					<EditIcon onClick={EditModalToggle} />
+					<DeleteStudent onClick={DeleteModalToggle} />
+				</div>
 			</div>
 			<div className={styles.infocontainer}>info</div>
 			<div className={styles.groupcontainer}>groups</div>
