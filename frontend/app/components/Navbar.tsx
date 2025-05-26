@@ -2,6 +2,7 @@ import styles from "../page.module.css";
 import Link from "next/link";
 import Image from "next/image";
 import LoginButton from "./LoginButton";
+import { HomeIcon, CalendarIcon, NotificationIcon } from "../icons/icons";
 
 export default function Navbar() {
 	const placeholderUser = {
@@ -13,14 +14,14 @@ export default function Navbar() {
 		<nav className={styles.navbar}>
 			<div className={styles.gridcontent}>
 				<Link href={"/"}>
-					<span className='material-symbols-outlined'>home</span>
+					<HomeIcon className={styles.icons} />
 				</Link>
 				<Link href={"/schedule"}>
-					<span className='material-symbols-outlined'>calendar_month</span>
+					<CalendarIcon className={styles.icons} />
 				</Link>
 			</div>
 			<div className={styles.usercontent}>
-				<span className={`material-symbols-outlined ${styles.icons}`}>notifications</span>
+				<NotificationIcon className={styles.icons} />
 				<LoginButton />
 				<Link href={"/profile"}>
 					<Image className={styles.icons} src={placeholderUser.profile_picture} alt={`${placeholderUser.first_name} avatar`} width={20} height={20} />

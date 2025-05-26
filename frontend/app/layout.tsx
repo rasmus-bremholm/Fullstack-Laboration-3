@@ -25,6 +25,7 @@ export default function RootLayout({
 	return (
 		<html lang='en'>
 			<head>
+				{/* Och varför i helvete funkar inte detta nu då när jag deployar till vercel? */}
 				<link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=optional' />
 			</head>
 			<body className={`${inter.variable}`}>
