@@ -91,6 +91,7 @@ export default function Profile() {
 					<p>N/A</p>
 				</div>
 				<Divider />
+				<button>Edit</button>
 			</div>
 			<div className={styles.groupcontainer}>groups</div>
 			<div className={styles.eventscontainer}>event</div>
