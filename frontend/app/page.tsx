@@ -6,6 +6,7 @@ import { Divider } from "@mui/material";
 import { useEffect, useState } from "react";
 import Posts from "./components/Posts";
 import { Group } from "./types/types";
+import { SubmitIcon } from "./icons/icons";
 
 export default function Home() {
 	const [postText, setPostText] = useState("");
@@ -86,7 +87,7 @@ export default function Home() {
 					<Divider />
 					<div className={styles.submitcontainer}>
 						<button type='submit' disabled={disabeledSubmit}>
-							<span className='material-symbols-outlined'>send</span>
+							<SubmitIcon className={extrastyles.icons} />
 						</button>
 						<select onChange={(event) => setSelectedGroup(Number(event.target.value))}>
 							<option value={""} disabled hidden>

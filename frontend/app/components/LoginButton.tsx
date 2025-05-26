@@ -4,6 +4,7 @@ import styles from "../page.module.css";
 import { useAuth } from "../utils/authcontext";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { LoginIcon, LogoutIcon } from "../icons/icons";
 
 export default function LoginButton() {
 	const { isLoggedIn, logout } = useAuth();
@@ -27,12 +28,10 @@ export default function LoginButton() {
 	if (!hasMounted) return null;
 
 	return isLoggedIn ? (
-		<span onClick={logoutUser} className={`material-symbols-outlined ${styles.icons}`}>
-			logout
-		</span>
+		<LogoutIcon onClick={logoutUser} className={styles.icons} />
 	) : (
 		<Link href={"/login"}>
-			<span className={`material-symbols-outlined ${styles.icons}`}>login</span>
+			<LoginIcon className={styles.icons} />
 		</Link>
 	);
 }
