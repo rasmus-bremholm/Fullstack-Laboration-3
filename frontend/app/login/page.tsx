@@ -145,7 +145,7 @@ export default function Login() {
 								id='first_name'
 								type='text'
 								name='first_name'
-								value={userSignUpDetails.email}
+								value={userSignUpDetails.first_name}
 								placeholder='FirstName'
 								onChange={(event) => setuserSignUpDetails({ ...userSignUpDetails, [event.target.name]: event.target.value })}
 							/>
@@ -156,7 +156,7 @@ export default function Login() {
 								id='last_name'
 								type='text'
 								name='last_name'
-								value={userSignUpDetails.email}
+								value={userSignUpDetails.last_name}
 								placeholder='LastName'
 								onChange={(event) => setuserSignUpDetails({ ...userSignUpDetails, [event.target.name]: event.target.value })}
 							/>

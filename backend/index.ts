@@ -8,6 +8,7 @@ import { Client, QueryResult } from "pg";
 import jwt from "jsonwebtoken";
 import { title } from "process";
 import { start } from "repl";
+import { log } from "console";
 
 /*
 	TODO:
@@ -129,7 +130,7 @@ app.get("/api/user", authToken, async (req: AuthRequest, res: Response) => {
 			"SELECT events.* FROM events JOIN group_members ON events.group_id = group_members.group_id WHERE group_members.student_id=$1",
 			[studentId]
 		);
-		console.log(events);
+		//console.log(events);
 		res.status(200).send({ student: student.rows[0], schedule: schedule.rows, groups: groups.rows, events: events.rows });
 	} catch (error) {
 		res.status(500).send({ error: "Something went wrong, stupid" }) as Response;
@@ -153,7 +154,7 @@ app.get("/api/students/:id", async (req, res) => {
 				[studentId]
 			);
 			res.status(200).send({ student: student.rows[0], schedule: schedule.rows, groups: groups.rows, events: events.rows });
-			console.log(student, schedule, groups, events);
+			//console.log(student, schedule, groups, events);
 		} catch (error) {
 			res.status(500).json({ error: "Something went wrong, stupid" });
 		}
@@ -161,6 +162,7 @@ app.get("/api/students/:id", async (req, res) => {
 });
 
 app.post("/api/students", async (req, res) => {
+	console.log("Inkommande info: ", req.body);
 	try {
 		const result: QueryResult = await client.query("INSERT INTO students (first_name, last_name, email, password) VALUES ($1, $2, $3, $4)", [
 			req.body.first_name,
@@ -169,6 +171,7 @@ app.post("/api/students", async (req, res) => {
 			req.body.password,
 		]);
 		const new_student_id = result.rows[0]?.id;
+
 		if (!new_student_id) {
 			res.status(400).send({ error: "Student couldnt be inserted" });
 		}
