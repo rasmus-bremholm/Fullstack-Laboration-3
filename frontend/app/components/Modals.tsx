@@ -30,16 +30,17 @@ export function EditStudentModal({ isOpen, onClose }: EditProps) {
 		password: "",
 		profile_picture: null,
 	});
+	const [disabeledSubmit, setDisabledSubmit] = useState(true);
 
 	useEffect(() => {
 		// Uppdatera setStudentInfo från fälten.
-		async function handleInput() {}
-		handleInput();
-	}, []);
+		const isFormFilled = !!studentInfo.first_name || !!studentInfo.last_name || !!studentInfo.email || !!studentInfo.password;
+		setDisabledSubmit(!isFormFilled);
+	}, [studentInfo]);
 
 	const handleSubmit = async () => {
 		const token = localStorage.getItem("token");
-		const response = await fetch("https://fullstack-laboration-3.onrender.com/api/", {
+		const response = await fetch("https://fullstack-laboration-3.onrender.com/api/students", {
 			method: "PUT",
 			headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
 			body: JSON.stringify({
@@ -75,6 +76,9 @@ export function EditStudentModal({ isOpen, onClose }: EditProps) {
 					<Divider />
 					<label htmlFor='password'>Password:</label>
 					<input type='text' name='password' onChange={(event) => setStudentInfo({ ...studentInfo, [event.target.name]: event.target.value })} />
+					<button type='submit' disabled={disabeledSubmit}>
+						Save
+					</button>
 				</form>
 			</div>
 		</div>

@@ -7,11 +7,12 @@ import type { User } from "../types/types";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { EditIcon, DeleteStudent } from "../icons/icons";
-import { EditModal, DeleteModal } from "../components/Modals";
+import { EditModal, DeleteModal, EditStudentModal } from "../components/Modals";
 import { Divider } from "@mui/material";
 
 export default function Profile() {
 	const [editModal, setEditModal] = useState(false);
+	const [editStudentModal, setEditStudentModal] = useState(false);
 	const [deleteModal, setDeleteModal] = useState(false);
 	const [user, setUser] = useState<User>({
 		id: 0,
@@ -91,7 +92,8 @@ export default function Profile() {
 					<p>N/A</p>
 				</div>
 				<Divider />
-				<button>Edit</button>
+				<button onClick={() => setEditStudentModal(true)}>Edit</button>
+				<EditStudentModal isOpen={editStudentModal} onClose={() => setEditStudentModal(false)} />
 			</div>
 			<div className={styles.groupcontainer}>groups</div>
 			<div className={styles.eventscontainer}>event</div>
