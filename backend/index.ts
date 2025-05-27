@@ -162,20 +162,19 @@ app.get("/api/students/:id", async (req, res) => {
 
 app.post("/api/students", async (req, res) => {
 	try {
-		const result: QueryResult = await client.query("INSERT INTO students (first_name, last_name, email, password) VALUES ($1, $2, $3, $4, $5)", [
+		const result: QueryResult = await client.query("INSERT INTO students (first_name, last_name, email, password) VALUES ($1, $2, $3, $4)", [
 			req.body.first_name,
 			req.body.last_name,
 			req.body.email,
 			req.body.password,
 		]);
-
-		if (result?.rowCount && result.rowCount > 0) {
-			// Sucess
-			res.status(201).send({ message: "Student created" });
-		} else {
-			// Fail
+		const new_student_id = result.rows[0]?.id;
+		if (!new_student_id) {
 			res.status(400).send({ error: "Student couldnt be inserted" });
 		}
+		await client.query("INSERT INTO group_members (student_id, group_id) VALUES ($1, $2)", [new_student_id, 1]);
+		// Sucess
+		res.status(201).send({ message: "Student created" });
 	} catch (error) {
 		res.status(500).send({ error: "Couldnt insert student into database" });
 	}

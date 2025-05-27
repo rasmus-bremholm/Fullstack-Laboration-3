@@ -39,6 +39,7 @@ export default function Login() {
 		if (response.ok) {
 			console.log("Vi skapade ditt konto!");
 			setSignUp(false);
+			setuserSignUpDetails({ first_name: "", last_name: "", email: "", password: "", repeat_password: "" });
 		} else {
 			console.error("Vi kunde inte skapa kontot", response.status);
 		}

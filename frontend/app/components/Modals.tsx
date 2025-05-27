@@ -33,12 +33,12 @@ export function EditStudentModal({ isOpen, onClose }: EditProps) {
 	const [disabeledSubmit, setDisabledSubmit] = useState(true);
 
 	useEffect(() => {
-		// Uppdatera setStudentInfo från fälten.
 		const isFormFilled = !!studentInfo.first_name || !!studentInfo.last_name || !!studentInfo.email || !!studentInfo.password;
 		setDisabledSubmit(!isFormFilled);
 	}, [studentInfo]);
 
-	const handleSubmit = async () => {
+	const handleSubmit = async (event: React.FormEvent) => {
+		event?.preventDefault();
 		const token = localStorage.getItem("token");
 		const response = await fetch("https://fullstack-laboration-3.onrender.com/api/students", {
 			method: "PUT",

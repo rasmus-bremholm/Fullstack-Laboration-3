@@ -116,21 +116,21 @@ app.get("/api/students/:id", (req, res) => __awaiter(void 0, void 0, void 0, fun
     }
 }));
 app.post("/api/students", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     try {
-        const result = yield client.query("INSERT INTO students (first_name, last_name, email, password) VALUES ($1, $2, $3, $4, $5)", [
+        const result = yield client.query("INSERT INTO students (first_name, last_name, email, password) VALUES ($1, $2, $3, $4)", [
             req.body.first_name,
             req.body.last_name,
             req.body.email,
             req.body.password,
         ]);
-        if ((result === null || result === void 0 ? void 0 : result.rowCount) && result.rowCount > 0) {
-            // Sucess
-            res.status(201).send({ message: "Student created" });
-        }
-        else {
-            // Fail
+        const new_student_id = (_a = result.rows[0]) === null || _a === void 0 ? void 0 : _a.id;
+        if (!new_student_id) {
             res.status(400).send({ error: "Student couldnt be inserted" });
         }
+        yield client.query("INSERT INTO group_members (student_id, group_id) VALUES ($1, $2)", [new_student_id, 1]);
+        // Sucess
+        res.status(201).send({ message: "Student created" });
     }
     catch (error) {
         res.status(500).send({ error: "Couldnt insert student into database" });
