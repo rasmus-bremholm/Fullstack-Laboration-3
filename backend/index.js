@@ -127,6 +127,7 @@ app.post("/api/students", (req, res) => __awaiter(void 0, void 0, void 0, functi
             req.body.password,
         ]);
         const new_student_id = (_a = result.rows[0]) === null || _a === void 0 ? void 0 : _a.id;
+        console.log(new_student_id);
         if (!new_student_id) {
             res.status(400).send({ error: "Student couldnt be inserted" });
         }
@@ -137,6 +138,7 @@ app.post("/api/students", (req, res) => __awaiter(void 0, void 0, void 0, functi
         }
     }
     catch (error) {
+        console.log("Felet", error);
         res.status(500).send({ error: "Couldnt insert student into database" });
     }
 }));

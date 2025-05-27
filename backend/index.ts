@@ -172,6 +172,7 @@ app.post("/api/students", async (req, res) => {
 			req.body.password,
 		]);
 		const new_student_id = result.rows[0]?.id;
+		console.log(new_student_id);
 
 		if (!new_student_id) {
 			res.status(400).send({ error: "Student couldnt be inserted" });
@@ -181,6 +182,8 @@ app.post("/api/students", async (req, res) => {
 			res.status(201).send({ message: "Student created" });
 		}
 	} catch (error) {
+		console.log("Felet", error);
+
 		res.status(500).send({ error: "Couldnt insert student into database" });
 	}
 });
