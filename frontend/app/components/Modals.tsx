@@ -65,10 +65,16 @@ export function EditStudentModal({ isOpen, onClose }: EditProps) {
 				<h2>Edit Student</h2>
 				<form onSubmit={handleSubmit}>
 					<label htmlFor='first_name'>First Name:</label>
-					<input type='text' name='first_name' />
+					<input type='text' name='first_name' onChange={(event) => setStudentInfo({ ...studentInfo, [event.target.name]: event.target.value })} />
 					<Divider />
-					<label htmlFor='first_name'>First Name:</label>
-					<input type='text' name='first_name' />
+					<label htmlFor='last_name'>Last Name:</label>
+					<input type='text' name='last_name' onChange={(event) => setStudentInfo({ ...studentInfo, [event.target.name]: event.target.value })} />
+					<Divider />
+					<label htmlFor='email'>Email:</label>
+					<input type='email' name='email' onChange={(event) => setStudentInfo({ ...studentInfo, [event.target.name]: event.target.value })} />
+					<Divider />
+					<label htmlFor='password'>Password:</label>
+					<input type='text' name='password' onChange={(event) => setStudentInfo({ ...studentInfo, [event.target.name]: event.target.value })} />
 				</form>
 			</div>
 		</div>
