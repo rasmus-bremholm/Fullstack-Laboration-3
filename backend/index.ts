@@ -175,10 +175,11 @@ app.post("/api/students", async (req, res) => {
 
 		if (!new_student_id) {
 			res.status(400).send({ error: "Student couldnt be inserted" });
+		} else {
+			await client.query("INSERT INTO group_members (student_id, group_id) VALUES ($1, $2)", [new_student_id, 1]);
+			// Sucess
+			res.status(201).send({ message: "Student created" });
 		}
-		await client.query("INSERT INTO group_members (student_id, group_id) VALUES ($1, $2)", [new_student_id, 1]);
-		// Sucess
-		res.status(201).send({ message: "Student created" });
 	} catch (error) {
 		res.status(500).send({ error: "Couldnt insert student into database" });
 	}
