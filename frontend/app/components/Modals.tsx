@@ -1,5 +1,5 @@
 import styles from "../styles/modal.module.css";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import type { User } from "../types/types";
 
 interface EditProps {
@@ -34,8 +34,20 @@ export function EditStudentModal({ isOpen, onClose }: EditProps) {
 		//
 	}, []);
 
-	const handleSubmit = () => {
+	const handleSubmit = async () => {
 		const token = localStorage.getItem("token");
+		const response = await fetch("https://fullstack-laboration-3.onrender.com/api/", {
+			method: "POST",
+			headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+			body: JSON.stringify({}),
+		});
+
+		if (response.ok) {
+			console.log("Updaterade info om studenten med id: ");
+			// Resetta fälten
+		} else {
+			console.error("Failade att uppdatera studenten ,", response.status);
+		}
 	};
 
 	if (!isOpen) return null;
