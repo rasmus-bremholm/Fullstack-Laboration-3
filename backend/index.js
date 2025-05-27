@@ -118,8 +118,9 @@ app.get("/api/students/:id", (req, res) => __awaiter(void 0, void 0, void 0, fun
 app.post("/api/students", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     console.log("Inkommande info: ", req.body);
+    // Ok så eftersom att INSERT inte returnerar några rows utan bara skickar till databasen så kan man lägga på RETURNING och vilken kolumn man vill ha ut....
     try {
-        const result = yield client.query("INSERT INTO students (first_name, last_name, email, password) VALUES ($1, $2, $3, $4)", [
+        const result = yield client.query("INSERT INTO students (first_name, last_name, email, password) VALUES ($1, $2, $3, $4) RETURNING id", [
             req.body.first_name,
             req.body.last_name,
             req.body.email,
