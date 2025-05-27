@@ -181,22 +181,22 @@ app.post("/api/students", async (req, res) => {
 	}
 });
 
-app.put("/api/students/:id", async (req, res) => {
-	const studentId = parseInt(req.params.id);
-	if (isNaN(studentId)) {
-		res.status(400).send({ error: "Id needs to be a number" });
-	} else {
-		try {
-			const result: QueryResult = await client.query(
-				"UPDATE students SET first_name=$2, last_name=$3, email=$4, password=$5, profile_picture=$6 WHERE id=$1",
-				[studentId, req.body.first_name, req.body.last_name, req.body.email, req.body.password, req.body.profile_picture]
-			);
-			if (result.rowCount && result.rowCount > 0) {
-				res.status(200).send({ message: "Updated student information" });
-			}
-		} catch (error) {
-			res.status(500).send({ error: "Couldnt update student" });
+app.put("/api/students", authToken, async (req: AuthRequest, res: Response) => {
+	// Denna funktionen måste göras om senare, men just nu så får den peka mot redigera konto detaljer.
+	const studentId = req.user!.id;
+	try {
+		const result: QueryResult = await client.query("UPDATE students SET first_name=$2, last_name=$3, email=$4, password=$5 WHERE id=$1", [
+			studentId,
+			req.body.first_name,
+			req.body.last_name,
+			req.body.email,
+			req.body.password,
+		]);
+		if (result.rowCount && result.rowCount > 0) {
+			res.status(200).send({ message: "Updated student information" });
 		}
+	} catch (error) {
+		res.status(500).send({ error: "Couldnt update student" });
 	}
 });
 

@@ -136,21 +136,23 @@ app.post("/api/students", (req, res) => __awaiter(void 0, void 0, void 0, functi
         res.status(500).send({ error: "Couldnt insert student into database" });
     }
 }));
-app.put("/api/students/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const studentId = parseInt(req.params.id);
-    if (isNaN(studentId)) {
-        res.status(400).send({ error: "Id needs to be a number" });
+app.put("/api/students", authToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // Denna funktionen måste göras om senare, men just nu så får den peka mot redigera konto detaljer.
+    const studentId = req.user.id;
+    try {
+        const result = yield client.query("UPDATE students SET first_name=$2, last_name=$3, email=$4, password=$5 WHERE id=$1", [
+            studentId,
+            req.body.first_name,
+            req.body.last_name,
+            req.body.email,
+            req.body.password,
+        ]);
+        if (result.rowCount && result.rowCount > 0) {
+            res.status(200).send({ message: "Updated student information" });
+        }
     }
-    else {
-        try {
-            const result = yield client.query("UPDATE students SET first_name=$2, last_name=$3, email=$4, password=$5, profile_picture=$6 WHERE id=$1", [studentId, req.body.first_name, req.body.last_name, req.body.email, req.body.password, req.body.profile_picture]);
-            if (result.rowCount && result.rowCount > 0) {
-                res.status(200).send({ message: "Updated student information" });
-            }
-        }
-        catch (error) {
-            res.status(500).send({ error: "Couldnt update student" });
-        }
+    catch (error) {
+        res.status(500).send({ error: "Couldnt update student" });
     }
 }));
 app.delete("/api/students/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
