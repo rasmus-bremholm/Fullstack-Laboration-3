@@ -31,7 +31,7 @@ export default function RootLayout({
 			</head>
 			<body className={`${inter.variable}`}>
 				<AuthProvider>
-					<ToastContainer position='top-right' autoClose={5000} pauseOnHover transition={Bounce} />
+					<ToastContainer position='top-right' autoClose={3500} pauseOnHover transition={Bounce} />
 					<div className='grid-container'>
 						<Navbar />
 						<main>{children}</main>
