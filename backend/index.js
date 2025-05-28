@@ -161,21 +161,21 @@ app.put("/api/students", authToken, (req, res) => __awaiter(void 0, void 0, void
         res.status(500).send({ error: "Couldnt update student" });
     }
 }));
-app.delete("/api/students/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const studentId = parseInt(req.params.id);
-    if (isNaN(studentId)) {
-        res.status(400).send({ error: "Id needs to be a number" });
+app.delete("/api/students/", authToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("Delete student sent to server");
+    const studentId = req.user.id;
+    try {
+        const result = yield client.query("DELETE FROM students WHERE id=$1 RETURNING id", [studentId]);
+        const deletedStudentId = result.rows[0].id;
+        if (deletedStudentId === studentId) {
+            res.status(204).send({ message: "Student Deleted" });
+        }
+        else {
+            res.status(409).send({ error: "Student couldnt be deleted" });
+        }
     }
-    else {
-        try {
-            const result = yield client.query("DELETE FROM students WHERE id=$1", [studentId]);
-            if (result.rowCount && result.rowCount > 0) {
-                res.status(204).send({ message: "Student Deleted" });
-            }
-        }
-        catch (error) {
-            res.status(500).send({ error: "Couldnt delete student" });
-        }
+    catch (error) {
+        res.status(500).send({ error: "Couldnt delete student" });
     }
 }));
 // Groups

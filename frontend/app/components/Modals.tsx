@@ -2,6 +2,8 @@ import styles from "../styles/modal.module.css";
 import { useState, useEffect } from "react";
 import type { User } from "../types/types";
 import { Divider } from "@mui/material";
+import { useAuth } from "../utils/authcontext";
+import { useRouter } from "next/navigation";
 
 interface EditProps {
 	isOpen: boolean;
@@ -86,6 +88,25 @@ export function EditStudentModal({ isOpen, onClose }: EditProps) {
 }
 
 export function DeleteModal({ isOpen, onClose }: EditProps) {
+	const { logout } = useAuth();
+	const router = useRouter();
+
+	const handleDelete = async () => {
+		const token = localStorage.getItem("token");
+		const response = await fetch("https://fullstack-laboration-3.onrender.com/api/students", {
+			method: "DELETE",
+			headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+		});
+
+		if (response.ok) {
+			console.log("Studenten deletades från databasen");
+			logout();
+			router.push("/");
+		} else {
+			console.log("Något fick fel", response.status);
+		}
+	};
+
 	if (!isOpen) return null;
 	return (
 		<div className={styles.backdrop} onClick={onClose}>
@@ -93,8 +114,8 @@ export function DeleteModal({ isOpen, onClose }: EditProps) {
 				<h2>Delete Student?</h2>
 				<p>Are you sure you want to delete your account?</p>
 				<div className={styles.buttoncontainer}>
-					<button>Yes</button>
-					<button>Also Yes</button>
+					<button onClick={() => handleDelete()}>Yes</button>
+					<button>No</button>
 				</div>
 			</div>
 		</div>
