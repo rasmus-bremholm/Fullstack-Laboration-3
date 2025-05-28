@@ -22,6 +22,7 @@ export default function Login() {
 	});
 	const loginToast = () => toast.success("Inloggad!");
 	const signUpToast = () => toast.success("Skapade nytt konto!");
+	const loginErrorToast = () => toast.error("Fel användarnamn eller lösenord");
 
 	const [passwordMatch, setPasswordMatch] = useState(false);
 
@@ -65,6 +66,7 @@ export default function Login() {
 			loginToast();
 			router.push("/");
 		} else {
+			loginErrorToast();
 			console.log("Login failade");
 		}
 	};
