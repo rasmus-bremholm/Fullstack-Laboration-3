@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { Bounce, ToastContainer } from "react-toastify";
 
 import Navbar from "./components/Navbar";
 import { AuthProvider } from "./utils/authcontext";
@@ -30,6 +31,7 @@ export default function RootLayout({
 			</head>
 			<body className={`${inter.variable}`}>
 				<AuthProvider>
+					<ToastContainer position='top-right' autoClose={5000} pauseOnHover transition={Bounce} />
 					<div className='grid-container'>
 						<Navbar />
 						<main>{children}</main>

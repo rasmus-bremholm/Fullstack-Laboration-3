@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Login_Form_Fields } from "../types/types";
 import { useRouter } from "next/navigation";
 import styles from "../styles/login.module.css";
+import { toast } from "react-toastify";
 
 export default function Login() {
 	const [signup, setSignUp] = useState(false);
@@ -19,6 +20,8 @@ export default function Login() {
 		password: "",
 		repeat_password: "",
 	});
+	const loginToast = () => toast.success("Inloggad!");
+	const signUpToast = () => toast.success("Skapade nytt konto!");
 
 	const [passwordMatch, setPasswordMatch] = useState(false);
 
@@ -38,6 +41,7 @@ export default function Login() {
 
 		if (response.ok) {
 			console.log("Vi skapade ditt konto!");
+			signUpToast();
 			setSignUp(false);
 			setuserSignUpDetails({ first_name: "", last_name: "", email: "", password: "", repeat_password: "" });
 		} else {
@@ -58,6 +62,7 @@ export default function Login() {
 			const data = await response.json();
 			localStorage.setItem("token", data.token);
 			console.log("Vi loggade in");
+			loginToast();
 			router.push("/");
 		} else {
 			console.log("Login failade");
