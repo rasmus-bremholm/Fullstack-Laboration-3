@@ -16,6 +16,7 @@ export default function Home() {
 	const [disabeledSubmit, setDisabledSubmit] = useState(true);
 	// Min ful refetch gör en retur! Måste tvinga min child komponent att köra om useEffect.
 	const [shouldRefetch, setShouldRefetch] = useState(false);
+	const [hasMounted, setHasMounted] = useState(false);
 
 	// Multi useEffect DRIFTINGGGG
 	// Svär till gud, fan 90% av alla komponenterna kommer vara client side i denna takten.
@@ -44,6 +45,7 @@ export default function Home() {
 					console.error("Frontenden kunde inte ta emot grupperna");
 				}
 			}
+			setHasMounted(true);
 			GetGroups();
 		}
 	}, []);
@@ -66,6 +68,8 @@ export default function Home() {
 			console.error("Failade att posta till backenden", response.status);
 		}
 	};
+
+	if (!hasMounted) return null;
 
 	return (
 		<div className={styles.feed}>
