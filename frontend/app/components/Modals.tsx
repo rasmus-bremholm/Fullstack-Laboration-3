@@ -4,6 +4,7 @@ import type { User } from "../types/types";
 import { Divider } from "@mui/material";
 import { useAuth } from "../utils/authcontext";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 interface EditProps {
 	isOpen: boolean;
@@ -24,6 +25,8 @@ export function EditModal({ isOpen, onClose }: EditProps) {
 }
 
 export function EditStudentModal({ isOpen, onClose }: EditProps) {
+	const editSucessToast = () => toast.success("Ändringarna sparades");
+	const editFailToast = () => toast.error("Ett problem inträffade");
 	const [studentInfo, setStudentInfo] = useState<User>({
 		id: 0,
 		first_name: "",
@@ -55,9 +58,11 @@ export function EditStudentModal({ isOpen, onClose }: EditProps) {
 
 		if (response.ok) {
 			console.log("Updaterade info om studenten med id: ");
+			editSucessToast();
 			setStudentInfo({ id: 0, first_name: "", last_name: "", email: "", password: "", profile_picture: null });
 		} else {
 			console.error("Failade att uppdatera studenten ,", response.status);
+			editFailToast();
 		}
 	};
 
@@ -88,6 +93,8 @@ export function EditStudentModal({ isOpen, onClose }: EditProps) {
 }
 
 export function DeleteModal({ isOpen, onClose }: EditProps) {
+	const deleteSucessToast = () => toast.warn("Kontot raderat");
+	const deleteFailToast = () => toast.success("Kunde inte radera konto");
 	const { logout } = useAuth();
 	const router = useRouter();
 
@@ -100,9 +107,11 @@ export function DeleteModal({ isOpen, onClose }: EditProps) {
 
 		if (response.ok) {
 			console.log("Studenten deletades från databasen");
+			deleteSucessToast();
 			logout();
 			router.push("/");
 		} else {
+			deleteFailToast();
 			console.log("Något fick fel", response.status);
 		}
 	};

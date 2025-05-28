@@ -10,6 +10,7 @@ import { EditIcon, DeleteStudent } from "../icons/icons";
 import { EditModal, DeleteModal, EditStudentModal } from "../components/Modals";
 import { Divider } from "@mui/material";
 
+
 export default function Profile() {
 	const [editModal, setEditModal] = useState(false);
 	const [editStudentModal, setEditStudentModal] = useState(false);
