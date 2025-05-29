@@ -113,6 +113,7 @@ Nothing to see here yet.
 ## Post Mortem
 
 Here I will take notes on what went wrong and what went right.
+Link to something I need to understand https://nextjs.org/docs/app/getting-started/server-and-client-components
 
 ---
 
