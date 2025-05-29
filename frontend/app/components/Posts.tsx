@@ -4,6 +4,7 @@ import { Post } from "../types/types";
 import styles from "../styles/posts.module.css";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { MoreVert } from "../icons/icons";
 
 // const url = process.env.BACKEND_URL;
 const url = "https://fullstack-laboration-3.onrender.com";
@@ -51,7 +52,7 @@ export default function Posts(refetchTrigger: PostProps) {
 						<Image src={post.profile_picture} alt={post.first_name + "avatar"} width={18} height={18} />
 						{post.first_name} {post.last_name}
 						<p className={styles.timestamp}>{dateFormatter(post.created_at)}</p>
-						<span className={`material-symbols-outlined ${styles.icon}`}>more_horiz</span>
+						<MoreVert />
 					</div>
 					<div className={styles.postcontent}>{post.text}</div>
 				</article>

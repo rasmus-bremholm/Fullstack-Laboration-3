@@ -40,7 +40,7 @@ export default function Profile() {
 			//console.log(data.student);
 		}
 		getUserDetails();
-	}, []);
+	}, [editModal]);
 
 	return (
 		<div className={styles.profilecontainer}>
