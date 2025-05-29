@@ -39,3 +39,26 @@
 	justify-content: center;
 	z-index: 998;
 }
+
+.avatarcontainer {
+	display: grid;
+	grid-template-columns: repeat(4, 70px);
+	grid-template-rows: repeat(3, 70px);
+	place-items: center;
+}
+
+.avatarwrapper {
+	display: grid;
+	place-items: center;
+	height: 100%;
+	width: 100%;
+	border-radius: var(--border-radius);
+	&:hover {
+		border: 2px solid var(--accent);
+	}
+}
+
+.selected {
+	border: 2px solid var(--accent);
+	box-shadow: var(--shadow);
+}

@@ -93,7 +93,9 @@ export default function Profile() {
 					<p>N/A</p>
 				</div>
 				<Divider />
-				<button onClick={() => setEditStudentModal(true)}>Edit</button>
+				<button className={styles.editbutton} onClick={() => setEditStudentModal(true)}>
+					Edit
+				</button>
 				<EditStudentModal isOpen={editStudentModal} onClose={() => setEditStudentModal(false)} />
 			</div>
 			<div className={styles.groupcontainer}>groups</div>

@@ -5,6 +5,7 @@ import { Divider } from "@mui/material";
 import { useAuth } from "../utils/authcontext";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import Image from "next/image";
 
 interface EditProps {
 	isOpen: boolean;
@@ -12,13 +13,73 @@ interface EditProps {
 }
 
 export function EditModal({ isOpen, onClose }: EditProps) {
+	const [selectedAvatar, setSelectedAvatar] = useState<string>("");
+	const editProfilePictureSucess = () => toast.success("Ny profilbild vald");
+
+	const avatarArray = [
+		"default-avatar",
+		"avatar_male_1",
+		"avatar_male_2",
+		"avatar_male_3",
+		"avatar_female_1",
+		"avatar_female_2",
+		"avatar_female_3",
+		"avatar_meme_1",
+		"avatar_meme_2",
+	];
+
 	if (!isOpen) return null;
+
+	// OG image path: /images/default-avatar.png
+
+	const selectAvatar = (avatar: string) => {
+		// Jag gör detta till en funktion ifall ja skulle vilja göra något mer här.
+		// Men toasten ska nog visas när jag submittar....hurrm
+		setSelectedAvatar(avatar);
+	};
+
+	const handleSubmit = async () => {
+		if (selectedAvatar) {
+			const token = localStorage.getItem("token");
+			const response = await fetch("https://fullstack-laboration-3.onrender.com/api/students", {
+				method: "PATCH",
+				body: JSON.stringify({ profile_picture: selectedAvatar }),
+				headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+			});
+
+			if (response.ok) {
+				console.log("Uppdaterade profilbilden!");
+				editProfilePictureSucess();
+				setSelectedAvatar("");
+				onClose();
+			} else {
+				console.log("Kunde inte uppdatera bilden");
+			}
+		} else {
+			console.log("Ingen bild vald");
+			setSelectedAvatar("");
+			onClose();
+		}
+	};
 
 	return (
 		<div className={styles.backdrop} onClick={onClose}>
 			<div className={styles.modal} onClick={(e) => e.stopPropagation()}>
 				<h2>Edit Avatar</h2>
-				<form action=''></form>
+				<p>Select a new avatar</p>
+				<div className={styles.avatarcontainer}>
+					{avatarArray.map((avatar, index) => (
+						<div
+							className={`${styles.avatarwrapper} ${selectedAvatar === avatar ? styles.selected : ""}`}
+							key={index}
+							onClick={() => selectAvatar(avatar)}>
+							<Image src={`/images/${avatar}.png`} alt={avatar} height={50} width={50} />
+						</div>
+					))}
+				</div>
+				<button className={styles.button} onClick={handleSubmit}>
+					Save
+				</button>
 			</div>
 		</div>
 	);

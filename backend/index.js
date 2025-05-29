@@ -161,6 +161,22 @@ app.put("/api/students", authToken, (req, res) => __awaiter(void 0, void 0, void
         res.status(500).send({ error: "Couldnt update student" });
     }
 }));
+app.patch("/api/students", authToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const studentId = req.user.id;
+    const imageString = `/images/${req.body.profile_picture}.png`;
+    try {
+        const result = yield client.query("UPDATE students SET profile_picture=$1 WHERE id=$2", [imageString, studentId]);
+        if (result.rowCount && result.rowCount > 0) {
+            res.status(200).send({ message: "Bilden uppdaterades" });
+        }
+        else {
+            res.status(404).send({ error: "Couldnt find student" });
+        }
+    }
+    catch (error) {
+        res.status(500).send({ error: "Couldnt update profile picture" });
+    }
+}));
 app.delete("/api/students/", authToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Delete student sent to server");
     const studentId = req.user.id;
