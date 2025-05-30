@@ -49,7 +49,7 @@ export default function Posts(refetchTrigger: PostProps) {
 			{posts.map((post: Post) => (
 				<article className={styles.post} key={post.id}>
 					<div className={styles.postheader}>
-						<Image src={post.profile_picture} alt={post.first_name + "avatar"} width={18} height={18} />
+						<Image className={styles.profilepicture} src={post.profile_picture} alt={post.first_name + "avatar"} width={18} height={18} />
 						{post.first_name} {post.last_name}
 						<p className={styles.timestamp}>{dateFormatter(post.created_at)}</p>
 						<MoreVert />

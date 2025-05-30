@@ -3,7 +3,7 @@
 "use client";
 
 import styles from "../styles/profile.module.css";
-import type { User } from "../types/types";
+import type { User, Profile_Event } from "../types/types";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { EditIcon, DeleteStudent } from "../icons/icons";
@@ -22,6 +22,7 @@ export default function Profile() {
 		password: "",
 		profile_picture: null,
 	});
+	const [events, setEvents] = useState<Profile_Event[]>([]);
 
 	useEffect(() => {
 		async function getUserDetails() {
@@ -36,6 +37,7 @@ export default function Profile() {
 			if (response.ok) {
 				console.log(data);
 				setUser(data.student);
+				setEvents(data.events);
 			}
 			//console.log(data.student);
 		}
@@ -45,7 +47,9 @@ export default function Profile() {
 	return (
 		<div className={styles.profilecontainer}>
 			<div className={styles.avatarcontainer}>
-				{user.profile_picture && <Image src={user.profile_picture} width={150} height={150} alt={user.first_name + "profile picture"} />}
+				{user.profile_picture && (
+					<Image className={styles.profilepicture} src={user.profile_picture} width={150} height={150} alt={user.first_name + "profile picture"} />
+				)}
 				<div>
 					<h2>
 						{user.first_name} {user.last_name}
@@ -98,8 +102,27 @@ export default function Profile() {
 				</button>
 				<EditStudentModal isOpen={editStudentModal} onClose={() => setEditStudentModal(false)} />
 			</div>
-			<div className={styles.groupcontainer}>groups</div>
-			<div className={styles.eventscontainer}>event</div>
+			<div className={styles.logscontainer}>
+				<h3>Loggbok</h3>
+				<form>
+					{/* Installera Quill och ersätt detta med en ritch text editor */}
+					<textarea name='' id=''></textarea>
+					<button type='submit'>Spara</button>
+				</form>
+			</div>
+			<div className={styles.eventscontainer}>
+				<h3>Lektioner</h3>
+				{events &&
+					events.map((event) => (
+						<div key={event.id}>
+							<p>{event.title}</p>
+							<p>
+								{event.start_time} - {event.end_time} - {event.weekday}
+							</p>
+							<Divider />
+						</div>
+					))}
+			</div>
 		</div>
 	);
 }
