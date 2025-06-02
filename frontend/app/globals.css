@@ -55,6 +55,12 @@ input:focus {
 	outline: 1px solid var(--text-color-inactive);
 }
 
+select {
+	padding: 0.5rem;
+	border-radius: var(--border-radius);
+	border: 2px solid var(--input-background);
+}
+
 button {
 	display: flex;
 	justify-content: center;

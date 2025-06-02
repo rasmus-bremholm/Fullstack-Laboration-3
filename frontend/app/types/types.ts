@@ -50,4 +50,14 @@ export interface Login_Form_Fields {
 	password: string;
 }
 
+export interface Profile_Event {
+	id: number;
+	group_id: number;
+	title: string;
+	weekday: string;
+	start_time: string;
+	end_time: string;
+	description: string;
+}
+
 export type Weekday = "Sunday" | "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday" | "Saturday";
