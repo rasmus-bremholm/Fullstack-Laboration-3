@@ -92,9 +92,9 @@ Database structure and avalible fields. Updates Continously
 -   [x] Profile Page
 -   [ ] Limit amount of posts getting fetched (maybe 25?)
 -   [ ] Images for posts (needs blob storage)
--   [ ] Delete Student
+-   [x] Delete Student
 -   [ ] Edit Groups
--   [ ] Edit Profile Picture
+-   [x] Edit Profile Picture
 -   [x] Edit Name/Email
 -   [ ] Add/Remove Events
 
