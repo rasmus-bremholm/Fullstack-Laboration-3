@@ -74,9 +74,6 @@ interface LoginFormData {
 	password: string;
 }
 
-interface Schedule_Event {
-	// In /api/user assign this type to the Events database call.
-}
 
 interface AuthRequest extends Request {
 	user?: { id: number; email: string };
