@@ -76,7 +76,7 @@ export default function Shedule() {
 				startAccessor='start'
 				endAccessor='end'
 				style={{ height: 700 }}
-				// Sätter en begränsning. Jävla piss dokumentation.
+				
 				min={new Date(1989, 1, 1, 8, 0)}
 				max={new Date(1989, 1, 1, 16, 45)}
 			/>

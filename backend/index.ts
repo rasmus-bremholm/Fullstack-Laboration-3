@@ -6,15 +6,8 @@ import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import { Client, QueryResult } from "pg";
 import jwt from "jsonwebtoken";
-import { title } from "process";
-import { start } from "repl";
-import { log } from "console";
 
-/*
-	TODO:
-	- Fixa "avatar" bilden i databasen. Måste bara lägga till typen här så den kommer med.
 
-*/
 
 // Global Variables
 const port = process.env.PORT || 1338;
